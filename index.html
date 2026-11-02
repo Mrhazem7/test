@@ -311,6 +311,7 @@
                     <button onclick="saveMeal()" class="flex-1 bg-app-primary text-app-bg font-bold py-3 rounded-xl hover:bg-app-primaryDark transition-all">حفظ</button>
                     <button onclick="closeMealEdit()" class="flex-1 bg-app-bg text-white font-bold py-3 rounded-xl border border-app-surfaceAlt">إلغاء</button>
                 </div>
+                <button id="btn-delete-meal" onclick="deleteMeal()" class="w-full mt-3 bg-red-500/10 text-red-500 font-bold py-2 rounded-xl hover:bg-red-500/20 transition-all">حذف هذه الوجبة</button>
             </div>
         </div>
     </div>
@@ -371,6 +372,9 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // ==========================================
+        // INITIAL DATA STATE
+        // ==========================================
         let nutritionData = {
             macros: { calories: 2100, protein: 170, carbs: 210, fats: 65 },
             meals: [
@@ -424,9 +428,28 @@
             }
         ];
 
-        window.currentWater = 0;
+        // ==========================================
+        // LOAD FROM LOCAL STORAGE (VITAL FOR GITHUB PAGES)
+        // ==========================================
+        const localMacros = localStorage.getItem('hazm_macros');
+        if (localMacros) nutritionData.macros = JSON.parse(localMacros);
+
+        const localMeals = localStorage.getItem('hazm_meals');
+        if (localMeals) nutritionData.meals = JSON.parse(localMeals);
+
+        const localSupps = localStorage.getItem('hazm_supps');
+        if (localSupps) nutritionData.supplements = JSON.parse(localSupps);
+
+        const localWorkouts = localStorage.getItem('hazm_workouts');
+        if (localWorkouts) workouts = JSON.parse(localWorkouts);
+
+        // ==========================================
+        // UI & HELPERS
+        // ==========================================
+        window.currentWater = parseInt(localStorage.getItem('hazm_water')) || 0;
         window.updateWater = function(val) {
             window.currentWater = parseInt(val);
+            localStorage.setItem('hazm_water', window.currentWater);
             const slider = document.getElementById('input-water');
             if (slider) slider.value = window.currentWater;
             const textVal = document.getElementById('water-val-text');
@@ -447,8 +470,17 @@
             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
             const quoteEl = document.getElementById('motivation-text');
             if (quoteEl) quoteEl.innerText = randomQuote;
+            
+            // Set slider to saved value
+            const slider = document.getElementById('input-water');
+            if (slider) {
+                slider.value = window.currentWater;
+                document.getElementById('water-val-text').innerText = window.currentWater + ' أكواب';
+            }
+
             renderNutrition();
             renderWorkouts();
+            loadHistory(); // Load history immediately from local storage
         });
 
         function calculateDynamicTotals() {
@@ -468,6 +500,9 @@
             return { calories: totalCal, protein: totalPro, carbs: totalCarb, fats: totalFat };
         }
 
+        // ==========================================
+        // STOPWATCHES
+        // ==========================================
         window.startWorkoutTimer = function() {
             const btn = document.getElementById('timer-btn');
             const display = document.getElementById('timer-display');
@@ -530,6 +565,9 @@
             document.getElementById('exec-timer-btn').innerText = 'بدء';
         };
 
+        // ==========================================
+        // FIREBASE INIT
+        // ==========================================
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'hazem-fitness-app-v10';
         let app, db, auth, currentUser = null;
 
@@ -584,6 +622,9 @@
             setTimeout(() => toast.classList.add('translate-y-10', 'opacity-0'), 3000);
         }
 
+        // ==========================================
+        // SMART MEAL CALCULATOR
+        // ==========================================
         window.autoCalculateMeal = function() {
             let text = document.getElementById('edit-meal-items').value;
             let totalCal = 0, totalPro = 0, totalCarb = 0, totalFat = 0;
@@ -655,6 +696,9 @@
             }
         };
 
+        // ==========================================
+        // RENDERING
+        // ==========================================
         function renderNutrition() {
             const container = document.getElementById('nutrition-container');
             const dynamicMacros = calculateDynamicTotals();
@@ -676,16 +720,13 @@
             let cPct = Math.min(100, (dynamicMacros.carbs / (nutritionData.macros.carbs || 1)) * 100);
             let fPct = Math.min(100, (dynamicMacros.fats / (nutritionData.macros.fats || 1)) * 100);
 
-            // التصميم الجديد والمحسن لبطاقة الهدف اليومي
             html += `
                 <div class="bg-app-surface rounded-2xl p-6 mb-5 border border-app-surfaceAlt shadow-lg relative overflow-hidden flex flex-col items-center">
                     
-                    <!-- زر التعديل (أنيق ومخفي بالزاوية) -->
                     <button onclick="openMacroEdit()" class="absolute top-4 left-4 text-app-textMuted hover:text-app-primary p-2 bg-app-bg/60 rounded-xl border border-app-surfaceAlt transition-all shadow-sm z-10">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     </button>
 
-                    <!-- السعرات الحرارية بالمنتصف بشكل بارز ومميز -->
                     <div class="flex flex-col items-center mb-6 relative z-10 w-full mt-2">
                         <span class="text-[10px] font-bold text-app-primary bg-app-primary/10 border border-app-primary/20 px-3 py-1 rounded-full mb-3 shadow-sm">الهدف اليومي</span>
                         <div class="flex items-baseline justify-center gap-1.5" dir="ltr">
@@ -695,10 +736,8 @@
                         </div>
                     </div>
 
-                    <!-- الماكروز بتصميم شبكي (Grid) متناسق وأنيق -->
                     <div class="grid grid-cols-3 gap-3 w-full bg-app-bg/50 p-4 rounded-xl border border-app-surfaceAlt/50">
                         
-                        <!-- بروتين -->
                         <div class="flex flex-col gap-1.5">
                             <div class="flex justify-between items-center w-full px-1">
                                 <span class="text-[11px] font-bold text-app-textMuted">برو</span>
@@ -709,7 +748,6 @@
                             </div>
                         </div>
 
-                        <!-- كارب -->
                         <div class="flex flex-col gap-1.5">
                             <div class="flex justify-between items-center w-full px-1">
                                 <span class="text-[11px] font-bold text-app-textMuted">كارب</span>
@@ -720,7 +758,6 @@
                             </div>
                         </div>
 
-                        <!-- دهون -->
                         <div class="flex flex-col gap-1.5">
                             <div class="flex justify-between items-center w-full px-1">
                                 <span class="text-[11px] font-bold text-app-textMuted">دهون</span>
@@ -758,6 +795,12 @@
                     </div>
                 `;
             });
+
+            html += `
+                <button onclick="addNewMeal()" class="w-full bg-app-primary/10 border border-app-primary/30 text-app-primary font-bold py-3 rounded-xl mb-4 hover:bg-app-primary/20 transition-all shadow-sm flex items-center justify-center gap-2">
+                    <span class="text-lg leading-none">+</span> إضافة وجبة أو سناك
+                </button>
+            `;
 
             let suppsList = nutritionData.supplements.map(sup => `
                 <div class="flex justify-between items-center bg-app-bg p-3 rounded-xl border border-app-surfaceAlt">
@@ -805,12 +848,15 @@
                             </button>
                         </div>
                         <div class="space-y-1 mt-1">${exercisesHTML}</div>
-                        ${day.note ? `<div class="text-[11px] text-amber-500 mt-4 font-semibold">${day.note}</div>` : ''}
+                        ${day.note ? `<div class="text-[11px] text-amber-500 mt-4 font-semibold leading-relaxed">${day.note}</div>` : ''}
                     </div>
                 `;
             });
         }
 
+        // ==========================================
+        // EDIT & SAVE FUNCTIONS (WITH LOCAL STORAGE)
+        // ==========================================
         window.openMacroEdit = function() {
             document.getElementById('edit-cal').value = nutritionData.macros.calories;
             document.getElementById('edit-pro').value = nutritionData.macros.protein;
@@ -824,6 +870,9 @@
             nutritionData.macros.protein = parseInt(document.getElementById('edit-pro').value) || 0;
             nutritionData.macros.carbs = parseInt(document.getElementById('edit-carbs').value) || 0;
             nutritionData.macros.fats = parseInt(document.getElementById('edit-fats').value) || 0;
+            
+            localStorage.setItem('hazm_macros', JSON.stringify(nutritionData.macros)); // حفظ محلي
+            
             renderNutrition();
             closeMacroEdit();
             showToast("تم تحديث الهدف الأساسي!");
@@ -846,9 +895,32 @@
             if(items.length === 0) stats = "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون";
 
             nutritionData.meals[index] = { title, stats, items };
+            
+            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals)); // حفظ محلي
+
             renderNutrition();
             closeMealEdit();
             showToast("تم الحفظ وتحديث الهدف فوق!");
+        };
+
+        window.addNewMeal = function() {
+            nutritionData.meals.push({
+                title: "سناك أو وجبة جديدة",
+                stats: "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون",
+                items: ["أضف مكوناتك هنا..."]
+            });
+            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
+            renderNutrition();
+            openMealEdit(nutritionData.meals.length - 1); // يفتح نافذة التعديل مباشرة
+        };
+
+        window.deleteMeal = function() {
+            const index = document.getElementById('edit-meal-index').value;
+            nutritionData.meals.splice(index, 1);
+            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
+            renderNutrition();
+            closeMealEdit();
+            showToast("تم حذف الوجبة بنجاح! 🗑️");
         };
 
         window.getSuppRowHTML = function(name = "", dose = "", time = "") {
@@ -883,6 +955,9 @@
                 if (name !== "") newSupps.push({ name, dose, time });
             });
             nutritionData.supplements = newSupps;
+
+            localStorage.setItem('hazm_supps', JSON.stringify(nutritionData.supplements)); // حفظ محلي
+
             renderNutrition();
             closeSuppsEdit();
             showToast("تم تحديث المكملات بنجاح! 💊");
@@ -943,6 +1018,8 @@
             if (index === -1) workouts.push({ title, exercises: newExercises, note });
             else workouts[index] = { title, exercises: newExercises, note };
 
+            localStorage.setItem('hazm_workouts', JSON.stringify(workouts)); // حفظ محلي
+
             renderWorkouts();
             closeWorkoutEdit();
             showToast("تم الحفظ بنجاح! 🦾");
@@ -952,12 +1029,16 @@
             const index = parseInt(document.getElementById('edit-workout-index').value);
             if (index > -1) {
                 workouts.splice(index, 1);
+                localStorage.setItem('hazm_workouts', JSON.stringify(workouts)); // حفظ محلي
                 renderWorkouts();
                 closeWorkoutEdit();
                 showToast("تم حذف اليوم بنجاح!");
             }
         }
 
+        // ==========================================
+        // HISTORY & LOCAL STORAGE TRACKING (WITH DELETE FIX)
+        // ==========================================
         document.getElementById('btn-save').addEventListener('click', async () => {
             const date = document.getElementById('today-date').value;
             const data = {
@@ -970,19 +1051,59 @@
                 notes: document.getElementById('input-notes').value,
                 timestamp: Date.now()
             };
-            if (currentUser && db) {
-                await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'daily_logs', date), data);
+
+            // الحفظ محلياً في جهاز المستخدم
+            let logs = JSON.parse(localStorage.getItem('hazm_logs') || '[]');
+            const existingIndex = logs.findIndex(l => l.date === date);
+            if (existingIndex > -1) logs[existingIndex] = data; // تحديث
+            else logs.push(data); // يوم جديد
+            
+            localStorage.setItem('hazm_logs', JSON.stringify(logs));
+            loadHistory(); // تحديث فوري بالواجهة
+
+            // محاولة الحفظ السحابي إن وجد
+            if (typeof currentUser !== 'undefined' && currentUser && typeof db !== 'undefined' && db) {
+                try {
+                    await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'daily_logs', date), data);
+                } catch (e) {} 
             }
+            
             showToast("تم حفظ سجل اليوم بنجاح! 🦾");
         });
 
+        // الحذف المباشر والسريع دون نوافذ تأكيد وبدون أي خطأ برمجي
+        window.deleteLog = async function(dateToDelete) {
+            let logs = JSON.parse(localStorage.getItem('hazm_logs') || '[]');
+            logs = logs.filter(l => l.date !== dateToDelete);
+            localStorage.setItem('hazm_logs', JSON.stringify(logs));
+            
+            loadHistory(); // تحديث الشاشة بعد الحذف مباشرة
+            showToast("تم حذف اليوم بنجاح! 🗑️");
+            
+            if (typeof currentUser !== 'undefined' && currentUser && typeof db !== 'undefined' && db) {
+                try { 
+                    await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'daily_logs', dateToDelete)); 
+                } catch (e) {
+                    console.error("Cloud delete skipped");
+                }
+            }
+        };
+
         function loadHistory() {
-            if (!currentUser || !db) return;
+            // جلب البيانات من التخزين المحلي أولاً 
+            let logs = JSON.parse(localStorage.getItem('hazm_logs') || '[]');
+            logs.sort((a, b) => b.timestamp - a.timestamp);
+            renderHistory(logs);
+
+            // الاستماع لقاعدة البيانات السحابية (إن وجدت)
+            if (typeof currentUser === 'undefined' || !currentUser || typeof db === 'undefined' || !db) return;
             onSnapshot(collection(db, 'artifacts', appId, 'users', currentUser.uid, 'daily_logs'), (snapshot) => {
-                const logs = [];
-                snapshot.forEach(doc => logs.push(doc.data()));
-                logs.sort((a, b) => b.timestamp - a.timestamp);
-                renderHistory(logs);
+                const fbLogs = [];
+                snapshot.forEach(doc => fbLogs.push(doc.data()));
+                if(fbLogs.length > 0) {
+                    fbLogs.sort((a, b) => b.timestamp - a.timestamp);
+                    renderHistory(fbLogs);
+                }
             });
         }
 
@@ -995,15 +1116,45 @@
 
             logs.forEach(log => {
                 container.innerHTML += `
-                    <div class="bg-app-surface rounded-xl border border-app-surfaceAlt p-4 flex justify-between items-center">
-                        <span class="text-white font-bold">${log.date}</span>
-                        <span class="text-app-primary font-bold">${log.weight ? log.weight + ' kg' : 'متابعة منجزة'}</span>
+                    <div class="bg-app-surface rounded-xl border border-app-surfaceAlt p-4 flex justify-between items-center group relative">
+                        <span class="text-white font-bold flex flex-col gap-1">
+                            ${log.date}
+                            <span class="text-[10px] text-app-textMuted font-normal">
+                                ${log.workoutDone ? '💪 تمرين' : '🛌 راحة'} | ${log.mealsDone ? '🥗 دايت' : '🍔 تخبيص'}
+                            </span>
+                        </span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-app-primary font-bold">${log.weight ? log.weight + ' kg' : 'متابعة'}</span>
+                            <button onclick="window.deleteLog('${log.date}')" class="text-red-500/50 hover:text-red-500 p-1 transition-colors" title="حذف اليوم">
+                                <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
                     </div>
                 `;
             });
         }
 
         window.showStatsSummary = function() {
+            let logs = JSON.parse(localStorage.getItem('hazm_logs') || '[]');
+            document.getElementById('sum-total-days').innerText = logs.length;
+            
+            let totalSteps = logs.reduce((sum, log) => sum + (log.steps || 0), 0);
+            document.getElementById('sum-steps').innerText = totalSteps > 0 ? totalSteps : '0';
+
+            let dietDays = logs.filter(l => l.mealsDone).length;
+            let workoutDays = logs.filter(l => l.workoutDone).length;
+            document.getElementById('sum-diet-days').innerText = dietDays + ' يوم';
+            document.getElementById('sum-workout-days').innerText = workoutDays + ' يوم';
+
+            if(logs.length >= 2) {
+                logs.sort((a, b) => a.timestamp - b.timestamp); 
+                let firstWeight = logs.find(l => l.weight > 0)?.weight || 0;
+                let lastWeight = [...logs].reverse().find(l => l.weight > 0)?.weight || 0;
+                if(firstWeight && lastWeight && firstWeight > lastWeight) {
+                    document.getElementById('sum-weight-lost').innerText = (firstWeight - lastWeight).toFixed(1) + ' kg';
+                }
+            }
+
             document.getElementById('modal-summary').classList.remove('hidden');
         };
     </script>
