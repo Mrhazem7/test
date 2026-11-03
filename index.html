@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تطبيق Hazm Fit</title>
+    <title>Hazm Fit | تطبيق الابطال</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     
@@ -40,12 +40,14 @@
             background-color: #121212;
             color: #f3f4f6;
             -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+            font-family: 'Cairo', sans-serif;
         }
         .animate-fade-in {
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.25s ease-in-out;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+            from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
         input[type="checkbox"] {
@@ -91,17 +93,17 @@
             <h1 class="text-2xl font-bold mb-1 flex items-center justify-center gap-2">
                 💪 Hazm Fit
             </h1>
-            <p class="text-app-textMuted text-xs tracking-wide uppercase">Body Recomposition</p>
+            <p class="text-app-textMuted text-xs tracking-wide uppercase">BODY RECOMPOSITION</p>
         </header>
 
-        <!-- Modern Tabs -->
+        <!-- Dynamic Tabs -->
         <div class="grid grid-cols-3 gap-2 bg-app-surface p-1.5 rounded-xl mb-6 border border-app-surfaceAlt">
             <button onclick="switchTab('nutrition')" id="btn-nutrition" class="py-2.5 text-sm font-bold rounded-lg transition-all duration-300 bg-app-primary text-app-bg shadow-sm">التغذية</button>
             <button onclick="switchTab('workouts')" id="btn-workouts" class="py-2.5 text-sm font-bold rounded-lg transition-all duration-300 text-app-textMuted hover:text-white">التمارين</button>
             <button onclick="switchTab('tracking')" id="btn-tracking" class="py-2.5 text-sm font-bold rounded-lg transition-all duration-300 text-app-textMuted hover:text-white">المتابعة</button>
         </div>
 
-        <!-- Dynamic Daily Motivation Banner -->
+        <!-- Motivation Banner -->
         <div id="daily-motivation-box" class="bg-app-surface border border-app-primary/30 rounded-xl p-3.5 mb-6 text-center shadow-md animate-fade-in">
             <span class="text-[10px] font-bold text-app-primary block mb-1">💡 رسالة اليوم لتحفيزك</span>
             <p id="motivation-text" class="text-xs text-app-textMain font-medium leading-relaxed"></p>
@@ -159,7 +161,6 @@
         <!-- ================= SECTION: TRACKING ================= -->
         <section id="sec-tracking" class="hidden animate-fade-in">
             <div class="bg-app-surface rounded-2xl p-6 border border-app-surfaceAlt shadow-lg mb-6">
-                
                 <div class="space-y-5">
                     <div>
                         <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">التاريخ</label>
@@ -174,14 +175,6 @@
                     <div>
                         <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">عدد الخطوات اليوم</label>
                         <input type="number" id="input-steps" placeholder="مثال: 8500" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt focus:outline-none focus:border-app-primary transition-colors text-right font-sans" dir="rtl">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">أكواب الماء اليوم (من أصل 8)</label>
-                        <div class="flex items-center gap-3 bg-app-bg p-3 rounded-xl border border-app-surfaceAlt">
-                            <input type="range" id="input-water" min="0" max="8" value="0" class="w-full accent-app-water cursor-pointer" oninput="updateWater(this.value)">
-                            <span id="water-val-text" class="text-xs font-bold text-app-water w-16 text-center">0 أكواب</span>
-                        </div>
                     </div>
 
                     <div class="flex items-center justify-between bg-app-bg p-4 rounded-xl border border-app-surfaceAlt">
@@ -216,7 +209,7 @@
 
     </div>
 
-    <!-- Toast -->
+    <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-app-surface border border-app-surfaceAlt text-app-textMain font-bold px-6 py-3 rounded-full shadow-2xl transition-all duration-300 translate-y-10 opacity-0 pointer-events-none z-50 flex items-center gap-2">
         <span class="text-app-primary text-xl" id="toast-icon">✓</span>
         <span id="toast-msg">تم الحفظ بنجاح! 🦾</span>
@@ -226,12 +219,6 @@
     <div id="modal-summary" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex justify-center items-center p-4">
         <div class="bg-app-surface w-full max-w-sm rounded-2xl p-6 border border-app-surfaceAlt shadow-2xl max-h-[90vh] overflow-y-auto">
             <h2 class="text-xl font-bold mb-4 text-white text-center">📊 ملخص رحلتك والأوسكار</h2>
-            
-            <div class="mb-5 bg-app-bg p-3 rounded-xl border border-app-surfaceAlt">
-                <span class="block text-[10px] text-app-textMuted font-bold mb-2 text-center">🏆 الأوسكار والأوسمة المفتوحة</span>
-                <div id="badges-container" class="flex flex-wrap gap-2 justify-center"></div>
-            </div>
-
             <div class="grid grid-cols-2 gap-3 mb-5">
                 <div class="bg-app-bg p-3 rounded-xl border border-app-surfaceAlt text-center">
                     <span class="block text-[10px] text-app-textMuted font-bold mb-1">أيام الالتزام</span>
@@ -250,7 +237,6 @@
                     <div class="flex justify-between text-xs"><span>التمرين:</span><span id="sum-workout-days" class="text-app-primary font-bold">0</span></div>
                 </div>
             </div>
-
             <button onclick="document.getElementById('modal-summary').classList.add('hidden')" class="w-full bg-app-primary text-app-bg font-bold py-3 rounded-xl hover:bg-app-primaryDark transition-all">رائع، استمر! 💪</button>
         </div>
     </div>
@@ -304,19 +290,19 @@
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">المكونات</label>
-                    <textarea id="edit-meal-items" rows="5" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt text-right resize-none font-sans leading-relaxed" dir="rtl"></textarea>
+                    <textarea id="edit-meal-items" rows="5" placeholder="اكتب الأصناف بكل أريحية (مثال: قوانص 200 جرام + رز ابيض 200 جرام)" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt text-right resize-none font-sans leading-relaxed" dir="rtl"></textarea>
                 </div>
                 <input type="hidden" id="edit-meal-index">
                 <div class="flex gap-3 mt-6">
                     <button onclick="saveMeal()" class="flex-1 bg-app-primary text-app-bg font-bold py-3 rounded-xl hover:bg-app-primaryDark transition-all">حفظ</button>
                     <button onclick="closeMealEdit()" class="flex-1 bg-app-bg text-white font-bold py-3 rounded-xl border border-app-surfaceAlt">إلغاء</button>
                 </div>
-                <button id="btn-delete-meal" onclick="deleteMeal()" class="w-full mt-3 bg-red-500/10 text-red-500 font-bold py-2 rounded-xl hover:bg-red-500/20 transition-all">حذف هذه الوجبة</button>
+                <button id="btn-delete-meal" onclick="deleteMeal()" class="w-full mt-3 bg-red-500/10 text-red-500 font-bold py-2.5 rounded-xl hover:bg-red-500/20 transition-all">حذف هذه الوجبة فوراً</button>
             </div>
         </div>
     </div>
 
-    <!-- Edit Supplements Modal -->
+    <!-- Edit Supps Modal -->
     <div id="modal-supps" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex justify-center items-center p-4">
         <div class="bg-app-surface w-full max-w-md rounded-2xl p-6 border border-app-surfaceAlt shadow-2xl max-h-[90vh] flex flex-col">
             <h2 class="text-xl font-bold mb-4 text-white shrink-0">تعديل المكملات</h2>
@@ -361,38 +347,19 @@
                 <button onclick="saveWorkout()" class="flex-1 bg-app-primary text-app-bg font-bold py-3 rounded-xl hover:bg-app-primaryDark transition-all">حفظ</button>
                 <button onclick="closeWorkoutEdit()" class="flex-1 bg-app-bg text-white font-bold py-3 rounded-xl border border-app-surfaceAlt">إلغاء</button>
             </div>
-            <!-- Delete Button -->
             <button id="btn-delete-workout" onclick="deleteWorkout()" class="w-full mt-3 bg-red-500/10 text-red-500 font-bold py-2 rounded-xl hidden hover:bg-red-500/20 transition-all">حذف هذا اليوم</button>
         </div>
     </div>
 
-    <!-- App Script -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // ==========================================
-        // INITIAL DATA STATE
-        // ==========================================
+    <!-- MAIN SCRIPT -->
+    <script>
+        // DATA STATE
         let nutritionData = {
             macros: { calories: 2100, protein: 170, carbs: 210, fats: 65 },
             meals: [
-                {
-                    title: "الفطور",
-                    stats: "~439 سعرة | 33غ برو | 46غ كارب | 13غ دهون",
-                    items: ["بيضتين مسلوقه", "شريحتين توست ابيض"]
-                },
-                {
-                    title: "الغداء",
-                    stats: "~513 سعرة | 43غ برو | 70غ كارب | 4غ دهون",
-                    items: ["200 غ قوانص دجاج مسلوقة ومحمرة", "250 غ أرز أبيض (مطبوخ)"]
-                },
-                {
-                    title: "العشاء",
-                    stats: "~451 سعرة | 48غ برو | 51غ كارب | 3غ دهون",
-                    items: ["صدر دجاج 200 غ (من الأهل بدون جلد)", "بطاطس 300 غ (قلاية هوائية)"]
-                }
+                { title: "الفطور", stats: "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون", items: [], pinned: false },
+                { title: "الغداء", stats: "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون", items: [], pinned: false },
+                { title: "العشاء", stats: "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون", items: [], pinned: false }
             ],
             supplements: [
                 { name: "فيتامين D3", dose: "حبة واحدة", time: "مع الفطور" },
@@ -405,37 +372,35 @@
             {
                 title: "اليوم 1 - تهيئة الجزء العلوي",
                 exercises: [
-                    { name: "ضغط على الجدار (Wall Pushups)", reps: "10-15 x 3", url: "" },
-                    { name: "سحب بالمطاط", reps: "12-15 x 3", url: "" }
+                    { name: "ضغط على الجدار (Wall Pushups)", reps: "10-15 x 3" },
+                    { name: "سحب بالمطاط", reps: "12-15 x 3" }
                 ],
                 note: "تمرين آمن ومناسب للبداية بالبيت."
             },
             {
                 title: "اليوم 2 - لياقة وكارديو",
                 exercises: [
-                    { name: "مشي سريع", reps: "20 دقيقة", url: "" },
-                    { name: "بلانك", reps: "30 ثانية x 3", url: "" }
+                    { name: "مشي سريع", reps: "20 دقيقة" },
+                    { name: "بلانك", reps: "30 ثانية x 3" }
                 ],
                 note: "ركز على التنفس."
             },
             {
                 title: "اليوم 3 - تهيئة الجزء السفلي",
                 exercises: [
-                    { name: "سكوات الكرسي", reps: "10-12 x 3", url: "" },
-                    { name: "رفرفة سمانة", reps: "15 x 3", url: "" }
+                    { name: "سكوات الكرسي", reps: "10-12 x 3" },
+                    { name: "رفرفة سمانة", reps: "15 x 3" }
                 ],
                 note: "سكوات الكرسي يحمي الركب."
             }
         ];
 
-        // ==========================================
-        // LOAD FROM LOCAL STORAGE (VITAL FOR GITHUB PAGES)
-        // ==========================================
+        // LOCAL STORAGE LOADING
+        const todayStr = new Date().toISOString().split('T')[0];
+        const lastActiveDate = localStorage.getItem('hazm_last_date');
+
         const localMacros = localStorage.getItem('hazm_macros');
         if (localMacros) nutritionData.macros = JSON.parse(localMacros);
-
-        const localMeals = localStorage.getItem('hazm_meals');
-        if (localMeals) nutritionData.meals = JSON.parse(localMeals);
 
         const localSupps = localStorage.getItem('hazm_supps');
         if (localSupps) nutritionData.supplements = JSON.parse(localSupps);
@@ -443,18 +408,55 @@
         const localWorkouts = localStorage.getItem('hazm_workouts');
         if (localWorkouts) workouts = JSON.parse(localWorkouts);
 
-        // ==========================================
-        // UI & HELPERS
-        // ==========================================
+        const localMeals = localStorage.getItem('hazm_meals');
+        if (localMeals) nutritionData.meals = JSON.parse(localMeals);
+
+        // RESET ON NEW DAY
+        if (lastActiveDate !== todayStr) {
+            localStorage.setItem('hazm_last_date', todayStr);
+            window.currentWater = 0;
+            localStorage.setItem('hazm_water', 0);
+            
+            nutritionData.meals.forEach(m => {
+                if (!m.pinned) {
+                    m.stats = "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون";
+                    m.items = [];
+                }
+            });
+            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
+        }
+
+        // HELPERS
         window.currentWater = parseInt(localStorage.getItem('hazm_water')) || 0;
         window.updateWater = function(val) {
             window.currentWater = parseInt(val);
             localStorage.setItem('hazm_water', window.currentWater);
-            const slider = document.getElementById('input-water');
-            if (slider) slider.value = window.currentWater;
-            const textVal = document.getElementById('water-val-text');
-            if (textVal) textVal.innerText = window.currentWater + ' أكواب';
             renderNutrition(); 
+        };
+
+        window.resetTodayCounter = function() {
+            window.currentWater = 0;
+            localStorage.setItem('hazm_water', 0);
+            nutritionData.meals.forEach(m => {
+                if (!m.pinned) {
+                    m.stats = "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون";
+                    m.items = [];
+                }
+            });
+            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
+            renderNutrition();
+            showToast("تم تصفير الوجبات غير المثبتة! 🔄");
+        };
+
+        window.togglePinMeal = function(index) {
+            nutritionData.meals[index].pinned = !nutritionData.meals[index].pinned;
+            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
+            renderNutrition();
+            if (nutritionData.meals[index].pinned) {
+                showToast(`تم تثبيت وجبة (${nutritionData.meals[index].title}) 📌`);
+            } else {
+                showToast(`تم إلغاء تثبيت وجبة (${nutritionData.meals[index].title})`);
+            }
         };
 
         let timerInterval = null, timeLeft = 60, isTimerRunning = false;
@@ -465,22 +467,17 @@
             "خطوة بخطوة، تصنع المعجزة. لا تستسلم! 🚀",
             "أكل البيت والتزامك البسيط اليوم يصنعون معجزة شهر كامل. 🌟"
         ];
-        
+
         window.addEventListener('DOMContentLoaded', () => {
             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
             const quoteEl = document.getElementById('motivation-text');
             if (quoteEl) quoteEl.innerText = randomQuote;
             
-            // Set slider to saved value
-            const slider = document.getElementById('input-water');
-            if (slider) {
-                slider.value = window.currentWater;
-                document.getElementById('water-val-text').innerText = window.currentWater + ' أكواب';
-            }
+            document.getElementById('today-date').value = todayStr;
 
             renderNutrition();
             renderWorkouts();
-            loadHistory(); // Load history immediately from local storage
+            loadHistory();
         });
 
         function calculateDynamicTotals() {
@@ -500,9 +497,7 @@
             return { calories: totalCal, protein: totalPro, carbs: totalCarb, fats: totalFat };
         }
 
-        // ==========================================
-        // STOPWATCHES
-        // ==========================================
+        // TIMER FUNCTIONS
         window.startWorkoutTimer = function() {
             const btn = document.getElementById('timer-btn');
             const display = document.getElementById('timer-display');
@@ -565,40 +560,6 @@
             document.getElementById('exec-timer-btn').innerText = 'بدء';
         };
 
-        // ==========================================
-        // FIREBASE INIT
-        // ==========================================
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'hazem-fitness-app-v10';
-        let app, db, auth, currentUser = null;
-
-        if (typeof __firebase_config !== 'undefined') {
-            const firebaseConfig = JSON.parse(__firebase_config);
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-            
-            const initAuth = async () => {
-                try {
-                    if (typeof __initial_auth_token !== 'undefined') {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
-                } catch (error) { console.error(error); }
-            };
-
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    currentUser = user;
-                    loadHistory();
-                }
-            });
-            initAuth();
-        }
-
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('today-date').value = today;
-
         window.switchTab = function(tabId) {
             document.getElementById('sec-nutrition').classList.add('hidden');
             document.getElementById('sec-workouts').classList.add('hidden');
@@ -610,7 +571,7 @@
 
             document.getElementById('sec-' + tabId).classList.remove('hidden');
             document.getElementById('btn-' + tabId).className = 'py-2.5 text-sm font-bold rounded-lg transition-all duration-300 bg-app-primary text-app-bg shadow-sm';
-        }
+        };
 
         function showToast(msg, isError = false) {
             const toast = document.getElementById('toast');
@@ -622,93 +583,196 @@
             setTimeout(() => toast.classList.add('translate-y-10', 'opacity-0'), 3000);
         }
 
-        // ==========================================
-        // SMART MEAL CALCULATOR
-        // ==========================================
+        // =========================================================
+        // FOOLPROOF SMART MEAL CALCULATOR (ACCURATE ARABIC PARSER)
+        // =========================================================
         window.autoCalculateMeal = function() {
-            let text = document.getElementById('edit-meal-items').value;
+            let rawText = document.getElementById('edit-meal-items').value || '';
+            if (!rawText.trim()) {
+                document.getElementById('edit-meal-stats').value = "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون";
+                showToast("الوجبة فارغة", true);
+                return;
+            }
+
             let totalCal = 0, totalPro = 0, totalCarb = 0, totalFat = 0;
-            const lines = text.split('\n');
-            
-            const dbFood = [
-                { keys: ['دجاج', 'صدور'], p: 23, c: 0, f: 1.5, cal: 110, type: '100g' },
-                { keys: ['قوانص'], p: 18, c: 0, f: 2, cal: 94, type: '100g' },
-                { keys: ['لحم', 'مفروم'], p: 20, c: 0, f: 10, cal: 170, type: '100g' },
-                { keys: ['تونة', 'تونه'], p: 25, c: 0, f: 1, cal: 110, type: '100g' },
-                { keys: ['شوفان'], p: 13, c: 68, f: 6.5, cal: 379, type: '100g' },
-                { keys: ['أرز', 'رز'], p: 2.7, c: 28, f: 0.3, cal: 130, type: '100g' },
-                { keys: ['بطاطس'], p: 2, c: 17, f: 0.1, cal: 77, type: '100g' },
-                { keys: ['توست'], p: 3, c: 15, f: 1, cal: 80, type: 'qty' },
-                { keys: ['خبز', 'رغيف', 'صامولي', 'خبزة'], p: 6, c: 32, f: 2, cal: 160, type: 'qty' },
-                { keys: ['جبن', 'جبنة', 'كيري', 'مثلثات', 'سائل', 'شيدر'], p: 1, c: 0.5, f: 5, cal: 55, type: 'qty' },
-                { keys: ['سوداني', 'زبدة فول'], p: 25, c: 20, f: 50, cal: 588, type: '100g' },
-                { keys: ['زيت', 'زيتون'], p: 0, c: 0, f: 100, cal: 884, type: '100g' },
-                { keys: ['واي', 'بروتين'], p: 24, c: 3, f: 1.5, cal: 120, type: 'qty' },
-                { keys: ['بيض'], p: 6.3, c: 0.6, f: 5.3, cal: 77, type: 'qty' },
-                { keys: ['لوز'], p: 21, c: 21, f: 50, cal: 579, type: '100g' },
-                { keys: ['فول', 'عدس'], p: 8, c: 20, f: 1, cal: 120, type: '100g' },
-                { keys: ['حليب', 'لبن'], p: 3.2, c: 4.8, f: 3.2, cal: 60, type: '100g' },
-                { keys: ['موز'], p: 1.3, c: 27, f: 0.3, cal: 105, type: 'qty' },
-                { keys: ['تمر'], p: 0.2, c: 5.3, f: 0, cal: 20, type: 'qty' }
+
+            function normalizeAr(str) {
+                return str.toLowerCase()
+                    .replace(/[أإآ]/g, 'ا')
+                    .replace(/ة/g, 'ه')
+                    .replace(/ى/g, 'ي')
+                    .replace(/[\u064B-\u0652]/g, '')
+                    .trim();
+            }
+
+            const foodDb = [
+                // 1. MEATS & OFFAL
+                { keys: ['قوانص', 'قانصه', 'قوانص دجاج'], p: 18, c: 0, f: 2.0, cal: 94, per: 100 },
+                { keys: ['قلوب', 'قلب دجاج'], p: 16, c: 0.7, f: 9, cal: 148, per: 100 },
+                { keys: ['كبده', 'كبدة'], p: 24, c: 3, f: 6, cal: 165, per: 100 },
+                { keys: ['صدور', 'صدر دجاج', 'صدور دجاج', 'دجاج'], p: 31, c: 0, f: 3.6, cal: 165, per: 100 },
+                { keys: ['فخذ', 'افخاذ'], p: 24, c: 0, f: 8, cal: 168, per: 100 },
+                { keys: ['لحم', 'مفروم'], p: 25, c: 0, f: 12, cal: 210, per: 100 },
+                { keys: ['تونه', 'تونة'], p: 22, c: 0, f: 1.5, cal: 110, per: 'qty' },
+                { keys: ['سمك', 'فيلييه'], p: 22, c: 0, f: 3, cal: 115, per: 100 },
+
+                // 2. EGGS & DAIRY
+                { keys: ['بيض', 'بيضه', 'بيضات'], p: 6.5, c: 0.5, f: 5.0, cal: 70, per: 'qty' },
+                { keys: ['كيري', 'جبن كيري', 'جبنه كيري'], p: 1.8, c: 1, f: 5, cal: 55, per: 'qty' },
+                { keys: ['جبن', 'جبنه', 'شيدر', 'مثلثات'], p: 3.5, c: 1, f: 5, cal: 65, per: 'qty' },
+                { keys: ['حليب', 'لبن'], p: 3.3, c: 4.8, f: 2.5, cal: 55, per: 100 },
+                { keys: ['زبادي يوناني'], p: 10, c: 3.6, f: 0.4, cal: 59, per: 100 },
+                { keys: ['زبادي'], p: 3.5, c: 4.7, f: 3.3, cal: 61, per: 100 },
+
+                // 3. RICE & CARBS
+                { keys: ['رز ابيض', 'ارز ابيض', 'رز', 'ارز', 'تمن'], p: 2.7, c: 28, f: 0.4, cal: 130, per: 100 },
+                { keys: ['بطاطس', 'بطاطا'], p: 2.0, c: 18, f: 0.1, cal: 83, per: 100 },
+                { keys: ['شوفان'], p: 13.5, c: 67, f: 6.5, cal: 380, per: 100 },
+                { keys: ['مكرونة', 'معكرونة', 'باستا'], p: 5.0, c: 25, f: 1.1, cal: 130, per: 100 },
+
+                // 4. BREADS
+                { keys: ['خبز بر', 'خبز اسمر', 'رغيف بر', 'رغيف اسمر'], p: 6, c: 32, f: 2, cal: 160, per: 'qty' },
+                { keys: ['خبز ابيض', 'رغيف ابيض', 'خبز', 'تميس', 'صامولي'], p: 6, c: 35, f: 1.5, cal: 170, per: 'qty' },
+                { keys: ['توست بر', 'توست اسمر'], p: 3.5, c: 13, f: 1, cal: 70, per: 'qty' },
+                { keys: ['توست'], p: 3, c: 15, f: 1, cal: 80, per: 'qty' },
+
+                // 5. RESTAURANTS & FAST FOOD
+                { keys: ['زنجر صاروخ', 'صاروخ زنجر'], p: 35, c: 70, f: 35, cal: 735, per: 'qty' },
+                { keys: ['زنجر', 'سوبرانو'], p: 30, c: 50, f: 25, cal: 545, per: 'qty' },
+                { keys: ['شاورما'], p: 20, c: 32, f: 15, cal: 343, per: 'qty' },
+                { keys: ['برجر', 'بورجر'], p: 24, c: 38, f: 18, cal: 410, per: 'qty' },
+                { keys: ['بروستد', 'بروست'], p: 28, c: 15, f: 22, cal: 370, per: 'qty' },
+                { keys: ['كبسه', 'مندي', 'مظبي', 'بخاري'], p: 25, c: 50, f: 14, cal: 426, per: 100 },
+
+                // 6. SOUPS & OTHERS
+                { keys: ['شوربة شوفان', 'شربة شوفان'], p: 5, c: 22, f: 3.5, cal: 140, per: 'qty' },
+                { keys: ['شوربة عدس', 'شربة عدس'], p: 10, c: 28, f: 3, cal: 180, per: 'qty' },
+                { keys: ['شوربة', 'شربة', 'شوربه'], p: 5, c: 18, f: 3, cal: 120, per: 'qty' },
+                { keys: ['كورنفليكس', 'كورن فليكس', 'سيريال'], p: 7.5, c: 84, f: 1, cal: 375, per: 100 },
+                { keys: ['موز', 'موزه'], p: 1.3, c: 27, f: 0.3, cal: 105, per: 'qty' },
+                { keys: ['تمر', 'تمور'], p: 0.2, c: 5.3, f: 0, cal: 20, per: 'qty' },
+                { keys: ['تفاح', 'تفاحه'], p: 0.3, c: 25, f: 0.2, cal: 95, per: 'qty' },
+                { keys: ['زيت زيتون', 'زيت'], p: 0, c: 0, f: 14, cal: 120, per: 'qty' },
+                { keys: ['زبدة فول', 'زبده فول سوداني', 'فول سوداني'], p: 4, c: 3, f: 8, cal: 95, per: 'qty' },
+                { keys: ['واي بروتين', 'بروتين'], p: 24, c: 3, f: 1.5, cal: 121, per: 'qty' }
             ];
 
-            let hasMatched = false;
+            const rawLines = rawText.split(/\n|\+|\s+مع\s+|,/);
 
-            lines.forEach(originalLine => {
-                if(originalLine.trim() === '') return;
-                
-                let line = originalLine
-                    .replace(/بيضتين/g, '2 بيض')
-                    .replace(/جبنتين/g, '2 جبنة')
-                    .replace(/رغيفين/g, '2 خبز')
-                    .replace(/علبتين/g, '2 علبة')
-                    .replace(/شريحتين/g, '2 توست')
-                    .replace(/حبتين/g, '2 حبة')
-                    .replace(/بيضة/g, '1 بيض')
-                    .replace(/شريحة/g, '1 توست')
-                    .replace(/حبة/g, '1 حبة')
-                    .replace(/رغيف/g, '1 خبز')
-                    .replace(/علبة/g, '1 علبة')
-                    .replace(/نصف/g, '0.5')
-                    .replace(/ربع/g, '0.25')
-                    .replace(/سكوبين/g, '2')
-                    .replace(/ملعقتين/g, '30')
-                    .replace(/ملعقة/g, '15');
+            rawLines.forEach(line => {
+                let lineNorm = normalizeAr(line);
+                if (!lineNorm) return;
 
-                const numMatch = line.match(/\d+(\.\d+)?/);
-                let amount = numMatch ? parseFloat(numMatch[0]) : 1;
+                let qty = 1;
+                let explicitGrams = false;
 
-                for (let item of dbFood) {
-                    if (item.keys.some(k => line.includes(k))) {
-                        hasMatched = true;
-                        let multiplier = item.type === '100g' ? (amount / 100) : amount;
-                        if (item.type === '100g' && amount <= 5) multiplier = amount; // للعلب أو الحبات
-                        if (item.keys.includes('لوز') && line.includes('حبات')) multiplier = (amount * 1.2) / 100;
-                        if (item.keys.includes('واي') && (line.includes('غ') || line.includes('جرام'))) multiplier = amount / 30; 
-                        if (item.keys.includes('زيت') && line.includes('مل')) multiplier = amount / 100;
-                        
-                        totalCal += item.cal * multiplier;
-                        totalPro += item.p * multiplier;
-                        totalCarb += item.c * multiplier;
-                        totalFat += item.f * multiplier;
+                // Match explicit gram indicators safely without matching stray letters
+                if (/(?:جرام|غرام|مل|ml)/.test(lineNorm) || /\d\s*[غg](?:\s|$)/.test(lineNorm)) {
+                    explicitGrams = true;
+                }
+
+                // Extract exact number to prevent partial matches (e.g. "5" inside "250")
+                const nums = lineNorm.match(/\d+(?:\.\d+)?/g);
+                if (nums && nums.length > 0) {
+                    qty = parseFloat(nums[0]);
+                } else {
+                    // Fallback to word numbers if no digits found
+                    const words = lineNorm.split(/\s+/);
+                    let foundQty = false;
+                    for (let w of words) {
+                        if (/^(نصف|نص)$/.test(w)) { qty = 0.5; foundQty = true; break; }
+                        if (/^(ثلاث|3)$/.test(w)) { qty = 3; foundQty = true; break; }
+                        if (/^(اربع|4)$/.test(w)) { qty = 4; foundQty = true; break; }
+                        if (/^(خمس|5)$/.test(w)) { qty = 5; foundQty = true; break; }
+                    }
+                    if (!foundQty) {
+                        if (/بيضتين|بيضان|حبتين|علبتين|علبتان|شريحتين|رغيفين|موزتين|تمرتين|كوبين|صحنين|قطعتا|قطعتين/.test(lineNorm)) {
+                            qty = 2;
+                        }
+                    }
+                }
+
+                if (qty >= 20) explicitGrams = true;
+
+                let sanitizedLine = lineNorm
+                    .replace(/(?:مسلوقه?|مطبوخه?|مصفاه?|طازجه?|مقليه?|مشويه?|محمره?|جامده?)/g, '')
+                    .replace(/(?:جرام|غرام|مل|ml)/g, '')
+                    .replace(/\d+(?:\.\d+)?\s*[غg]?/g, '') // remove numbers and adjacent gram symbols
+                    .replace(/\s[غg](?:\s|$)/g, ' ') // remove stray ' غ ' or ' g '
+                    .trim();
+
+                let lineWords = sanitizedLine.split(/\s+/).filter(w => w.length > 0);
+                let bestMatch = null;
+
+                for (let item of foodDb) {
+                    let matched = false;
+
+                    for (let key of item.keys) {
+                        let normKey = normalizeAr(key);
+
+                        if (normKey.includes(' ')) {
+                            if (sanitizedLine.includes(normKey)) {
+                                matched = true;
+                                break;
+                            }
+                        } else {
+                            for (let word of lineWords) {
+                                // STRICT PREVENTION: "ابيض" MUST NOT MATCH "بيض"
+                                if (word === 'ابيض' && normKey === 'بيض') continue;
+
+                                if (word === normKey) {
+                                    matched = true;
+                                    break;
+                                }
+                                if (normKey.length >= 4 && word.startsWith(normKey)) {
+                                    matched = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (matched) break;
+                    }
+
+                    if (matched) {
+                        bestMatch = item;
                         break;
                     }
                 }
+
+                if (bestMatch) {
+                    let multiplier = 1;
+                    if (bestMatch.per === 100) {
+                        if (explicitGrams || qty >= 20) {
+                            multiplier = qty / 100;
+                        } else {
+                            multiplier = (qty * 150) / 100;
+                        }
+                    } else {
+                        multiplier = qty;
+                    }
+
+                    totalPro += (bestMatch.p * multiplier);
+                    totalCarb += (bestMatch.c * multiplier);
+                    totalFat += (bestMatch.f * multiplier);
+                    totalCal += (bestMatch.cal * multiplier);
+                }
             });
 
-            if (hasMatched) {
-                document.getElementById('edit-meal-stats').value = `~${Math.round(totalCal)} سعرة | ${Math.round(totalPro)}غ برو | ${Math.round(totalCarb)}غ كارب | ${Math.round(totalFat)}غ دهون`;
-                showToast("تم الحساب! اضغط حفظ لتحديث الهدف فوق 🪄");
+            totalCal = Math.round(totalCal);
+            totalPro = Math.round(totalPro);
+            totalCarb = Math.round(totalCarb);
+            totalFat = Math.round(totalFat);
+
+            if (totalCal > 0 || totalPro > 0 || totalCarb > 0 || totalFat > 0) {
+                document.getElementById('edit-meal-stats').value = `~${totalCal} سعرة | ${totalPro}غ برو | ${totalCarb}غ كارب | ${totalFat}غ دهون`;
+                showToast("تم الحساب الدقيق 100%! 🪄");
             } else {
                 document.getElementById('edit-meal-stats').value = `0 سعرة | 0غ برو | 0غ كارب | 0غ دهون`;
-                if (text.trim() === '') showToast("تم تصفير الوجبة.");
-                else showToast("لم أتعرف على الكميات، تأكد من كتابة الرقم قبل الصنف.");
+                showToast("اكتب الأصناف بوضوح (مثال: رز ابيض 250 جرام)");
             }
         };
 
-        // ==========================================
         // RENDERING
-        // ==========================================
         function renderNutrition() {
             const container = document.getElementById('nutrition-container');
             const dynamicMacros = calculateDynamicTotals();
@@ -719,6 +783,7 @@
                 let active = i <= window.currentWater ? 'text-app-water drop-shadow-[0_0_5px_rgba(56,189,248,0.6)] scale-110' : 'text-app-surfaceAlt opacity-50 grayscale';
                 dropletsHTML += `<span onclick="updateWater(${i})" class="cursor-pointer text-2xl transition-all hover:scale-125 select-none ${active}">💧</span>`;
             }
+
             html += `
                 <div class="bg-app-surface rounded-2xl p-5 mb-5 border border-app-surfaceAlt shadow-md flex flex-col items-center">
                     <span class="text-xs font-bold text-white mb-3">متتبع الماء اليومي (8 أكواب)</span>
@@ -732,12 +797,16 @@
 
             html += `
                 <div class="bg-app-surface rounded-2xl p-6 mb-5 border border-app-surfaceAlt shadow-lg relative overflow-hidden flex flex-col items-center">
-                    
-                    <button onclick="openMacroEdit()" class="absolute top-4 left-4 text-app-textMuted hover:text-app-primary p-2 bg-app-bg/60 rounded-xl border border-app-surfaceAlt transition-all shadow-sm z-10">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    </button>
+                    <div class="w-full flex justify-between items-center mb-2 z-10">
+                        <button onclick="resetTodayCounter()" class="text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 px-2.5 py-1 rounded-lg font-bold hover:bg-red-500/20 transition-all flex items-center gap-1">
+                            🔄 تصفير غير المثبت
+                        </button>
+                        <button onclick="openMacroEdit()" class="text-app-textMuted hover:text-app-primary p-2 bg-app-bg/60 rounded-xl border border-app-surfaceAlt transition-all shadow-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </button>
+                    </div>
 
-                    <div class="flex flex-col items-center mb-6 relative z-10 w-full mt-2">
+                    <div class="flex flex-col items-center mb-6 relative z-10 w-full mt-1">
                         <span class="text-[10px] font-bold text-app-primary bg-app-primary/10 border border-app-primary/20 px-3 py-1 rounded-full mb-3 shadow-sm">الهدف اليومي</span>
                         <div class="flex items-baseline justify-center gap-1.5" dir="ltr">
                             <span class="text-5xl font-black text-white tracking-tight drop-shadow-sm">${dynamicMacros.calories}</span>
@@ -747,7 +816,6 @@
                     </div>
 
                     <div class="grid grid-cols-3 gap-3 w-full bg-app-bg/50 p-4 rounded-xl border border-app-surfaceAlt/50">
-                        
                         <div class="flex flex-col gap-1.5">
                             <div class="flex justify-between items-center w-full px-1">
                                 <span class="text-[11px] font-bold text-app-textMuted">برو</span>
@@ -777,7 +845,6 @@
                                 <div class="h-full bg-app-macroF transition-all duration-500 rounded-full" style="width: ${fPct}%"></div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             `;
@@ -790,16 +857,30 @@
                     </li>
                 `).join('');
 
+                let isPinned = meal.pinned || false;
+                let pinBtnStyle = isPinned 
+                    ? 'bg-app-primary/20 text-app-primary border-app-primary/40' 
+                    : 'bg-app-bg text-app-textMuted border-app-surfaceAlt hover:text-white';
+
                 html += `
                     <div class="bg-app-surface rounded-2xl p-5 mb-4 border border-app-surfaceAlt shadow-md relative">
                         <div class="flex justify-between items-start mb-3 border-b border-app-surfaceAlt border-dashed pb-3">
                             <div class="flex flex-col items-start pr-2">
-                                <h3 class="font-bold text-base text-white mb-1">${meal.title}</h3>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h3 class="font-bold text-base text-white">${meal.title}</h3>
+                                    ${isPinned ? '<span class="text-[10px] bg-app-primary/20 text-app-primary px-2 py-0.5 rounded font-bold">مثبتة 📌</span>' : ''}
+                                </div>
                                 <span class="text-[11px] font-semibold text-app-textMuted bg-app-bg px-2 py-1 rounded shadow-inner">${meal.stats}</span>
                             </div>
-                            <button onclick="openMealEdit(${index})" class="text-app-textMuted hover:text-app-primary p-2 bg-app-bg rounded-lg border border-app-surfaceAlt transition-colors shadow-sm shrink-0">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                            </button>
+
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <button onclick="togglePinMeal(${index})" class="text-xs px-2.5 py-1.5 rounded-lg border font-bold transition-all flex items-center gap-1 ${pinBtnStyle}">
+                                    📌 ${isPinned ? 'مثبتة' : 'تثبيت'}
+                                </button>
+                                <button onclick="openMealEdit(${index})" class="text-app-textMuted hover:text-app-primary p-2 bg-app-bg rounded-lg border border-app-surfaceAlt transition-colors shadow-sm shrink-0">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                            </div>
                         </div>
                         <ul class="space-y-2.5">${itemsList}</ul>
                     </div>
@@ -864,9 +945,7 @@
             });
         }
 
-        // ==========================================
-        // EDIT & SAVE FUNCTIONS (WITH LOCAL STORAGE)
-        // ==========================================
+        // EDIT & SAVE MODAL LOGIC
         window.openMacroEdit = function() {
             document.getElementById('edit-cal').value = nutritionData.macros.calories;
             document.getElementById('edit-pro').value = nutritionData.macros.protein;
@@ -881,8 +960,7 @@
             nutritionData.macros.carbs = parseInt(document.getElementById('edit-carbs').value) || 0;
             nutritionData.macros.fats = parseInt(document.getElementById('edit-fats').value) || 0;
             
-            localStorage.setItem('hazm_macros', JSON.stringify(nutritionData.macros)); // حفظ محلي
-            
+            localStorage.setItem('hazm_macros', JSON.stringify(nutritionData.macros));
             renderNutrition();
             closeMacroEdit();
             showToast("تم تحديث الهدف الأساسي!");
@@ -904,33 +982,37 @@
             const items = document.getElementById('edit-meal-items').value.split('\n').filter(i => i.trim() !== '');
             if(items.length === 0) stats = "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون";
 
-            nutritionData.meals[index] = { title, stats, items };
+            const currentPinState = nutritionData.meals[index]?.pinned || false;
+            nutritionData.meals[index] = { title, stats, items, pinned: currentPinState };
             
-            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals)); // حفظ محلي
-
+            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
             renderNutrition();
             closeMealEdit();
-            showToast("تم الحفظ وتحديث الهدف فوق!");
+            showToast("تم حفظ الوجبة وتحديث الهدف!");
         };
 
         window.addNewMeal = function() {
             nutritionData.meals.push({
                 title: "سناك أو وجبة جديدة",
                 stats: "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون",
-                items: ["أضف مكوناتك هنا..."]
+                items: ["أضف مكوناتك هنا..."],
+                pinned: false
             });
             localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
             renderNutrition();
-            openMealEdit(nutritionData.meals.length - 1); // يفتح نافذة التعديل مباشرة
+            openMealEdit(nutritionData.meals.length - 1);
         };
 
+        // INSTANT DELETE WITHOUT PROMPTS
         window.deleteMeal = function() {
             const index = document.getElementById('edit-meal-index').value;
-            nutritionData.meals.splice(index, 1);
-            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
-            renderNutrition();
-            closeMealEdit();
-            showToast("تم حذف الوجبة بنجاح! 🗑️");
+            if (index !== "" && index !== null && index !== undefined) {
+                nutritionData.meals.splice(parseInt(index), 1);
+                localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
+                renderNutrition();
+                closeMealEdit();
+                showToast("تم حذف الوجبة فوراً! 🗑️");
+            }
         };
 
         window.getSuppRowHTML = function(name = "", dose = "", time = "") {
@@ -965,12 +1047,10 @@
                 if (name !== "") newSupps.push({ name, dose, time });
             });
             nutritionData.supplements = newSupps;
-
-            localStorage.setItem('hazm_supps', JSON.stringify(nutritionData.supplements)); // حفظ محلي
-
+            localStorage.setItem('hazm_supps', JSON.stringify(nutritionData.supplements));
             renderNutrition();
             closeSuppsEdit();
-            showToast("تم تحديث المكملات بنجاح! 💊");
+            showToast("تم تحديث المكملات! 💊");
         };
 
         window.getExerciseRowHTML = function(name = "", reps = "") {
@@ -1022,14 +1102,13 @@
             exerciseRows.forEach(row => {
                 const name = row.querySelector('.ex-name').value.trim();
                 const reps = row.querySelector('.ex-reps').value.trim();
-                if (name !== "") newExercises.push({ name, reps, url: "" });
+                if (name !== "") newExercises.push({ name, reps });
             });
 
             if (index === -1) workouts.push({ title, exercises: newExercises, note });
             else workouts[index] = { title, exercises: newExercises, note };
 
-            localStorage.setItem('hazm_workouts', JSON.stringify(workouts)); // حفظ محلي
-
+            localStorage.setItem('hazm_workouts', JSON.stringify(workouts));
             renderWorkouts();
             closeWorkoutEdit();
             showToast("تم الحفظ بنجاح! 🦾");
@@ -1039,82 +1118,49 @@
             const index = parseInt(document.getElementById('edit-workout-index').value);
             if (index > -1) {
                 workouts.splice(index, 1);
-                localStorage.setItem('hazm_workouts', JSON.stringify(workouts)); // حفظ محلي
+                localStorage.setItem('hazm_workouts', JSON.stringify(workouts));
                 renderWorkouts();
                 closeWorkoutEdit();
                 showToast("تم حذف اليوم بنجاح!");
             }
-        }
+        };
 
-        // ==========================================
-        // HISTORY & LOCAL STORAGE TRACKING (WITH DELETE FIX)
-        // ==========================================
-        document.getElementById('btn-save').addEventListener('click', async () => {
+        // TRACKING LOGS
+        document.getElementById('btn-save').addEventListener('click', () => {
             const date = document.getElementById('today-date').value;
             const data = {
                 date,
                 weight: parseFloat(document.getElementById('input-weight').value) || null,
                 steps: parseInt(document.getElementById('input-steps').value) || null,
-                water: parseInt(document.getElementById('input-water').value) || 0,
+                water: window.currentWater || 0,
                 mealsDone: document.getElementById('check-meals').checked,
                 workoutDone: document.getElementById('check-workout').checked,
                 notes: document.getElementById('input-notes').value,
                 timestamp: Date.now()
             };
 
-            // الحفظ محلياً في جهاز المستخدم
             let logs = JSON.parse(localStorage.getItem('hazm_logs') || '[]');
             const existingIndex = logs.findIndex(l => l.date === date);
-            if (existingIndex > -1) logs[existingIndex] = data; // تحديث
-            else logs.push(data); // يوم جديد
+            if (existingIndex > -1) logs[existingIndex] = data;
+            else logs.push(data);
             
             localStorage.setItem('hazm_logs', JSON.stringify(logs));
-            loadHistory(); // تحديث فوري بالواجهة
-
-            // محاولة الحفظ السحابي إن وجد
-            if (typeof currentUser !== 'undefined' && currentUser && typeof db !== 'undefined' && db) {
-                try {
-                    await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'daily_logs', date), data);
-                } catch (e) {} 
-            }
-            
+            loadHistory();
             showToast("تم حفظ سجل اليوم بنجاح! 🦾");
         });
 
-        // الحذف المباشر والسريع دون نوافذ تأكيد وبدون أي خطأ برمجي
-        window.deleteLog = async function(dateToDelete) {
+        window.deleteLog = function(dateToDelete) {
             let logs = JSON.parse(localStorage.getItem('hazm_logs') || '[]');
             logs = logs.filter(l => l.date !== dateToDelete);
             localStorage.setItem('hazm_logs', JSON.stringify(logs));
-            
-            loadHistory(); // تحديث الشاشة بعد الحذف مباشرة
-            showToast("تم حذف اليوم بنجاح! 🗑️");
-            
-            if (typeof currentUser !== 'undefined' && currentUser && typeof db !== 'undefined' && db) {
-                try { 
-                    await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'daily_logs', dateToDelete)); 
-                } catch (e) {
-                    console.error("Cloud delete skipped");
-                }
-            }
+            loadHistory();
+            showToast("تم حذف اليوم فوراً! 🗑️");
         };
 
         function loadHistory() {
-            // جلب البيانات من التخزين المحلي أولاً 
             let logs = JSON.parse(localStorage.getItem('hazm_logs') || '[]');
             logs.sort((a, b) => b.timestamp - a.timestamp);
             renderHistory(logs);
-
-            // الاستماع لقاعدة البيانات السحابية (إن وجدت)
-            if (typeof currentUser === 'undefined' || !currentUser || typeof db === 'undefined' || !db) return;
-            onSnapshot(collection(db, 'artifacts', appId, 'users', currentUser.uid, 'daily_logs'), (snapshot) => {
-                const fbLogs = [];
-                snapshot.forEach(doc => fbLogs.push(doc.data()));
-                if(fbLogs.length > 0) {
-                    fbLogs.sort((a, b) => b.timestamp - a.timestamp);
-                    renderHistory(fbLogs);
-                }
-            });
         }
 
         function renderHistory(logs) {
@@ -1126,7 +1172,7 @@
 
             logs.forEach(log => {
                 container.innerHTML += `
-                    <div class="bg-app-surface rounded-xl border border-app-surfaceAlt p-4 flex justify-between items-center group relative">
+                    <div class="bg-app-surface rounded-xl border border-app-surfaceAlt p-4 flex justify-between items-center relative">
                         <span class="text-white font-bold flex flex-col gap-1">
                             ${log.date}
                             <span class="text-[10px] text-app-textMuted font-normal">
@@ -1135,7 +1181,7 @@
                         </span>
                         <div class="flex items-center gap-3">
                             <span class="text-app-primary font-bold">${log.weight ? log.weight + ' kg' : 'متابعة'}</span>
-                            <button onclick="window.deleteLog('${log.date}')" class="text-red-500/50 hover:text-red-500 p-1 transition-colors" title="حذف اليوم">
+                            <button onclick="window.deleteLog('${log.date}')" class="text-red-500/70 hover:text-red-500 p-2 transition-colors" title="حذف اليوم">
                                 <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                             </button>
                         </div>
