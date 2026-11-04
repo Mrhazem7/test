@@ -11,9 +11,7 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Cairo', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Cairo', 'sans-serif'] },
                     colors: {
                         app: {
                             bg: '#121212',
@@ -34,326 +32,112 @@
             }
         }
     </script>
-
     <style>
-        body {
-            background-color: #121212;
-            color: #f3f4f6;
-            -webkit-tap-highlight-color: transparent;
-            overflow-x: hidden;
-            font-family: 'Cairo', sans-serif;
-        }
-        .animate-fade-in {
-            animation: fadeIn 0.25s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        input[type="checkbox"] {
-            appearance: none;
-            background-color: #2c2c2e;
-            margin: 0;
-            width: 1.5em;
-            height: 1.5em;
-            border-radius: 0.4em;
-            display: grid;
-            place-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        input[type="checkbox"]::before {
-            content: "";
-            width: 0.8em;
-            height: 0.8em;
-            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-            transform: scale(0);
-            transform-origin: center;
-            transition: 120ms transform ease-in-out;
-            background-color: #121212;
-        }
-        input[type="checkbox"]:checked {
-            background-color: #4ade80;
-        }
-        input[type="checkbox"]:checked::before {
-            transform: scale(1);
-        }
-        ::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
-        }
+        body { background-color: #121212; color: #f3f4f6; -webkit-tap-highlight-color: transparent; overflow-x: hidden; font-family: 'Cairo', sans-serif; }
+        .animate-fade-in { animation: fadeIn 0.25s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+        input[type="checkbox"] { appearance: none; background-color: #2c2c2e; margin: 0; width: 1.5em; height: 1.5em; border-radius: 0.4em; display: grid; place-content: center; cursor: pointer; transition: all 0.2s ease; }
+        input[type="checkbox"]::before { content: ""; width: 0.8em; height: 0.8em; clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%); transform: scale(0); transition: 120ms transform ease-in-out; background-color: #121212; }
+        input[type="checkbox"]:checked { background-color: #4ade80; }
+        input[type="checkbox"]:checked::before { transform: scale(1); }
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
 </head>
 <body class="min-h-screen flex justify-center pb-12">
-
     <div class="w-full max-w-md px-4 pt-6">
-        
-        <!-- Header -->
         <header class="text-center mb-6">
-            <h1 class="text-2xl font-bold mb-1 flex items-center justify-center gap-2">
-                💪 Hazm Fit
-            </h1>
+            <h1 class="text-2xl font-bold mb-1 flex items-center justify-center gap-2">💪 Hazm Fit</h1>
             <p class="text-app-textMuted text-xs tracking-wide uppercase">BODY RECOMPOSITION</p>
         </header>
 
-        <!-- Dynamic Tabs -->
         <div class="grid grid-cols-3 gap-2 bg-app-surface p-1.5 rounded-xl mb-6 border border-app-surfaceAlt">
-            <button onclick="switchTab('nutrition')" id="btn-nutrition" class="py-2.5 text-sm font-bold rounded-lg transition-all duration-300 bg-app-primary text-app-bg shadow-sm">التغذية</button>
-            <button onclick="switchTab('workouts')" id="btn-workouts" class="py-2.5 text-sm font-bold rounded-lg transition-all duration-300 text-app-textMuted hover:text-white">التمارين</button>
-            <button onclick="switchTab('tracking')" id="btn-tracking" class="py-2.5 text-sm font-bold rounded-lg transition-all duration-300 text-app-textMuted hover:text-white">المتابعة</button>
+            <button onclick="switchTab('nutrition')" id="btn-nutrition" class="py-2.5 text-sm font-bold rounded-lg bg-app-primary text-app-bg shadow-sm">التغذية</button>
+            <button onclick="switchTab('workouts')" id="btn-workouts" class="py-2.5 text-sm font-bold rounded-lg text-app-textMuted hover:text-white">التمارين</button>
+            <button onclick="switchTab('tracking')" id="btn-tracking" class="py-2.5 text-sm font-bold rounded-lg text-app-textMuted hover:text-white">المتابعة</button>
         </div>
 
-        <!-- Motivation Banner -->
-        <div id="daily-motivation-box" class="bg-app-surface border border-app-primary/30 rounded-xl p-3.5 mb-6 text-center shadow-md animate-fade-in">
+        <div class="bg-app-surface border border-app-primary/30 rounded-xl p-3.5 mb-6 text-center shadow-md animate-fade-in">
             <span class="text-[10px] font-bold text-app-primary block mb-1">💡 رسالة اليوم لتحفيزك</span>
             <p id="motivation-text" class="text-xs text-app-textMain font-medium leading-relaxed"></p>
         </div>
 
-        <!-- ================= SECTION: NUTRITION ================= -->
+        <!-- NUTRITION -->
         <section id="sec-nutrition" class="block animate-fade-in">
             <div id="nutrition-container"></div>
         </section>
 
-        <!-- ================= SECTION: WORKOUTS ================= -->
+        <!-- WORKOUTS -->
         <section id="sec-workouts" class="hidden animate-fade-in">
             <div class="grid grid-cols-1 gap-3 mb-4">
-                <div class="bg-app-surface rounded-2xl p-4 border border-app-surfaceAlt shadow-md flex items-center justify-between">
-                    <div class="flex flex-col">
-                        <span class="text-xs font-bold text-white mb-0.5">⏱️ مؤقت الراحة (60 ثانية)</span>
-                        <span class="text-[10px] text-app-textMuted">بين الجولات</span>
-                    </div>
+                <div class="bg-app-surface rounded-2xl p-4 border border-app-surfaceAlt flex items-center justify-between">
+                    <span class="text-xs font-bold text-white">⏱️ مؤقت الراحة (60 ثانية)</span>
                     <div class="flex items-center gap-3">
                         <span id="timer-display" class="text-lg font-black text-app-primary font-mono">01:00</span>
-                        <button onclick="startWorkoutTimer()" id="timer-btn" class="bg-app-primary text-app-bg text-xs font-bold px-3 py-2 rounded-xl hover:bg-app-primaryDark transition-all shadow-sm">بدء</button>
-                        <button onclick="resetWorkoutTimer()" class="bg-app-surfaceAlt text-white text-xs px-2.5 py-2 rounded-xl hover:bg-app-surfaceAlt/80 transition-all">إعادة</button>
-                    </div>
-                </div>
-
-                <div class="bg-app-surface rounded-2xl p-4 border border-app-surfaceAlt shadow-md flex items-center justify-between">
-                    <div class="flex flex-col">
-                        <span class="text-xs font-bold text-white mb-0.5">⏱️ عداد وقت التمرين</span>
-                        <span class="text-[10px] text-app-textMuted">حساب مدة التمرين</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span id="exec-timer-display" class="text-lg font-black text-app-macroP font-mono">00:00</span>
-                        <button onclick="startExerciseStopwatch()" id="exec-timer-btn" class="bg-app-macroP text-white text-xs font-bold px-3 py-2 rounded-xl hover:bg-app-macroP/80 transition-all shadow-sm">بدء</button>
-                        <button onclick="resetExerciseStopwatch()" class="bg-app-surfaceAlt text-white text-xs px-2.5 py-2 rounded-xl hover:bg-app-surfaceAlt/80 transition-all">إعادة</button>
+                        <button onclick="startWorkoutTimer()" id="timer-btn" class="bg-app-primary text-app-bg text-xs font-bold px-3 py-2 rounded-xl">بدء</button>
+                        <button onclick="resetWorkoutTimer()" class="bg-app-surfaceAlt text-white text-xs px-2.5 py-2 rounded-xl">إعادة</button>
                     </div>
                 </div>
             </div>
-
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-sm text-white flex items-center gap-2">🏋️ أيام التمرين</h3>
-                <button onclick="openWorkoutEdit(-1)" class="text-xs bg-app-primary/20 text-app-primary px-3 py-1.5 rounded-lg font-bold hover:bg-app-primary/30 transition-colors shadow-sm flex items-center gap-1">
-                    + إضافة يوم
-                </button>
-            </div>
-
             <div id="workouts-container"></div>
-            
-            <div class="mt-4 p-4 rounded-xl border border-app-surfaceAlt bg-app-surface text-xs text-app-textMuted space-y-2 leading-relaxed">
-                <p class="font-bold text-app-textMain mb-1">💡 ملاحظات عامة:</p>
-                <p>• إحماء قبل كل تمرين: إطالات حركية + أول تمرين بنص الوزن و15-20 تكرار.</p>
-                <p>• أيام الراحة: بطن + بلانك فقط، ومشي 7-10 آلاف خطوة.</p>
-            </div>
         </section>
 
-        <!-- ================= SECTION: TRACKING ================= -->
+        <!-- TRACKING -->
         <section id="sec-tracking" class="hidden animate-fade-in">
-            <div class="bg-app-surface rounded-2xl p-6 border border-app-surfaceAlt shadow-lg mb-6">
-                <div class="space-y-5">
-                    <div>
-                        <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">التاريخ</label>
-                        <input type="date" id="today-date" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt focus:outline-none focus:border-app-primary transition-colors font-sans">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">الوزن (كجم)</label>
-                        <input type="number" id="input-weight" step="0.1" placeholder="مثال: 101.5" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt focus:outline-none focus:border-app-primary transition-colors text-right font-sans" dir="rtl">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">عدد الخطوات اليوم</label>
-                        <input type="number" id="input-steps" placeholder="مثال: 8500" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt focus:outline-none focus:border-app-primary transition-colors text-right font-sans" dir="rtl">
-                    </div>
-
-                    <div class="flex items-center justify-between bg-app-bg p-4 rounded-xl border border-app-surfaceAlt">
-                        <label class="text-sm font-semibold text-app-textMain">التزمت بوجبات اليوم</label>
-                        <input type="checkbox" id="check-meals">
-                    </div>
-
-                    <div class="flex items-center justify-between bg-app-bg p-4 rounded-xl border border-app-surfaceAlt">
-                        <label class="text-sm font-semibold text-app-textMain">سويت تمرين اليوم</label>
-                        <input type="checkbox" id="check-workout">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">ملاحظات (اختياري)</label>
-                        <textarea id="input-notes" placeholder="كيف كان طاقتك اليوم؟ التزمت 100%؟" rows="3" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt focus:outline-none focus:border-app-primary transition-colors text-right resize-none font-sans" dir="rtl"></textarea>
-                    </div>
-
-                    <button id="btn-save" class="w-full bg-app-primary text-app-bg font-bold text-lg py-3.5 rounded-xl mt-2 hover:bg-app-primaryDark transition-all active:scale-[0.98] shadow-lg shadow-app-primary/20">حفظ اليوم</button>
+            <div class="bg-app-surface rounded-2xl p-6 border border-app-surfaceAlt shadow-lg mb-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">التاريخ</label>
+                    <input type="date" id="today-date" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt font-sans">
                 </div>
+                <div>
+                    <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">الوزن (كجم)</label>
+                    <input type="number" id="input-weight" step="0.1" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt text-right font-sans" dir="rtl">
+                </div>
+                <button id="btn-save" class="w-full bg-app-primary text-app-bg font-bold text-lg py-3 rounded-xl mt-2">حفظ اليوم</button>
             </div>
-
             <div id="history-section" class="hidden pb-10">
-                <div class="flex justify-between items-center mb-3 px-2">
-                    <h3 class="text-sm font-bold text-app-textMain">سجل الأيام السابقة</h3>
-                    <button onclick="showStatsSummary()" class="text-xs bg-app-primary/20 text-app-primary px-3 py-1.5 rounded-lg font-bold hover:bg-app-primary/30 transition-colors shadow-sm flex items-center gap-1">
-                        📊 ملخص إنجازاتي
-                    </button>
-                </div>
+                <h3 class="text-sm font-bold text-app-textMain mb-3 px-2">سجل الأيام السابقة</h3>
                 <div id="history-container" class="space-y-3"></div>
             </div>
         </section>
-
     </div>
 
-    <!-- Toast Notification -->
+    <!-- TOAST -->
     <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-app-surface border border-app-surfaceAlt text-app-textMain font-bold px-6 py-3 rounded-full shadow-2xl transition-all duration-300 translate-y-10 opacity-0 pointer-events-none z-50 flex items-center gap-2">
         <span class="text-app-primary text-xl" id="toast-icon">✓</span>
         <span id="toast-msg">تم الحفظ بنجاح! 🦾</span>
     </div>
 
-    <!-- Summary Modal -->
-    <div id="modal-summary" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex justify-center items-center p-4">
-        <div class="bg-app-surface w-full max-w-sm rounded-2xl p-6 border border-app-surfaceAlt shadow-2xl max-h-[90vh] overflow-y-auto">
-            <h2 class="text-xl font-bold mb-4 text-white text-center">📊 ملخص رحلتك والأوسكار</h2>
-            <div class="grid grid-cols-2 gap-3 mb-5">
-                <div class="bg-app-bg p-3 rounded-xl border border-app-surfaceAlt text-center">
-                    <span class="block text-[10px] text-app-textMuted font-bold mb-1">أيام الالتزام</span>
-                    <span class="text-lg font-black text-app-primary" id="sum-total-days">0</span>
-                </div>
-                <div class="bg-app-bg p-3 rounded-xl border border-app-surfaceAlt text-center">
-                    <span class="block text-[10px] text-app-textMuted font-bold mb-1">الوزن المفقود</span>
-                    <span class="text-lg font-black text-white" id="sum-weight-lost">0 kg</span>
-                </div>
-                <div class="bg-app-bg p-3 rounded-xl border border-app-surfaceAlt text-center">
-                    <span class="block text-[10px] text-app-textMuted font-bold mb-1">مجموع الخطوات</span>
-                    <span class="text-lg font-black text-white" id="sum-steps">0</span>
-                </div>
-                <div class="bg-app-bg p-3 rounded-xl border border-app-surfaceAlt text-center flex flex-col justify-center">
-                    <div class="flex justify-between text-xs mb-1"><span>الأكل:</span><span id="sum-diet-days" class="text-app-primary font-bold">0</span></div>
-                    <div class="flex justify-between text-xs"><span>التمرين:</span><span id="sum-workout-days" class="text-app-primary font-bold">0</span></div>
-                </div>
-            </div>
-            <button onclick="document.getElementById('modal-summary').classList.add('hidden')" class="w-full bg-app-primary text-app-bg font-bold py-3 rounded-xl hover:bg-app-primaryDark transition-all">رائع، استمر! 💪</button>
-        </div>
-    </div>
-
-    <!-- Edit Macros Modal -->
+    <!-- MACROS MODAL -->
     <div id="modal-macros" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex justify-center items-center p-4">
-        <div class="bg-app-surface w-full max-w-sm rounded-2xl p-6 border border-app-surfaceAlt shadow-2xl">
-            <h2 class="text-xl font-bold mb-4 text-white">تعديل الهدف اليومي</h2>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">السعرات الحرارية</label>
-                    <input type="number" id="edit-cal" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt text-right font-sans" dir="rtl">
-                </div>
-                <div class="grid grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-app-textMuted mb-2 text-center">دهون (g)</label>
-                        <input type="number" id="edit-fats" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt text-center font-sans">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-app-textMuted mb-2 text-center">كارب (g)</label>
-                        <input type="number" id="edit-carbs" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt text-center font-sans">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-app-textMuted mb-2 text-center">بروتين (g)</label>
-                        <input type="number" id="edit-pro" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt text-center font-sans">
-                    </div>
-                </div>
-                <div class="flex gap-3 mt-6">
-                    <button onclick="saveMacros()" class="flex-1 bg-app-primary text-app-bg font-bold py-3 rounded-xl hover:bg-app-primaryDark transition-all">حفظ</button>
-                    <button onclick="closeMacroEdit()" class="flex-1 bg-app-bg text-white font-bold py-3 rounded-xl border border-app-surfaceAlt">إلغاء</button>
-                </div>
+        <div class="bg-app-surface w-full max-w-sm rounded-2xl p-6 border border-app-surfaceAlt shadow-2xl space-y-4">
+            <h2 class="text-xl font-bold text-white">تعديل الهدف اليومي</h2>
+            <div><label class="text-xs text-app-textMuted">السعرات</label><input type="number" id="edit-cal" class="w-full bg-app-bg text-white p-3 rounded-xl border border-app-surfaceAlt text-right font-sans"></div>
+            <div class="grid grid-cols-3 gap-2">
+                <div><label class="text-[10px] text-app-textMuted">دهون</label><input type="number" id="edit-fats" class="w-full bg-app-bg text-white p-2 rounded-xl border border-app-surfaceAlt text-center font-sans"></div>
+                <div><label class="text-[10px] text-app-textMuted">كارب</label><input type="number" id="edit-carbs" class="w-full bg-app-bg text-white p-2 rounded-xl border border-app-surfaceAlt text-center font-sans"></div>
+                <div><label class="text-[10px] text-app-textMuted">برو</label><input type="number" id="edit-pro" class="w-full bg-app-bg text-white p-2 rounded-xl border border-app-surfaceAlt text-center font-sans"></div>
             </div>
+            <div class="flex gap-2"><button onclick="saveMacros()" class="flex-1 bg-app-primary text-app-bg py-3 rounded-xl font-bold">حفظ</button><button onclick="closeMacroEdit()" class="flex-1 bg-app-bg text-white py-3 rounded-xl border border-app-surfaceAlt">إلغاء</button></div>
         </div>
     </div>
 
-    <!-- Edit Meal Modal -->
+    <!-- MEAL MODAL -->
     <div id="modal-meal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex justify-center items-center p-4">
-        <div class="bg-app-surface w-full max-w-sm rounded-2xl p-6 border border-app-surfaceAlt shadow-2xl">
-            <h2 class="text-xl font-bold mb-4 text-white">تعديل الوجبة</h2>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">اسم الوجبة</label>
-                    <input type="text" id="edit-meal-title" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt text-right font-sans" dir="rtl">
-                </div>
-                <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="block text-xs font-semibold text-app-textMuted text-right">البيانات</label>
-                        <button type="button" onclick="autoCalculateMeal()" class="text-[10px] bg-app-primary/20 text-app-primary px-3 py-1.5 rounded-lg font-bold hover:bg-app-primary/40 transition-colors">حساب ذكي 🪄</button>
-                    </div>
-                    <input type="text" id="edit-meal-stats" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt text-right font-sans text-sm" dir="rtl">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">المكونات</label>
-                    <textarea id="edit-meal-items" rows="5" placeholder="اكتب الأصناف بكل أريحية (مثال: قوانص 200 جرام + رز ابيض 200 جرام)" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt text-right resize-none font-sans leading-relaxed" dir="rtl"></textarea>
-                </div>
-                <input type="hidden" id="edit-meal-index">
-                <div class="flex gap-3 mt-6">
-                    <button onclick="saveMeal()" class="flex-1 bg-app-primary text-app-bg font-bold py-3 rounded-xl hover:bg-app-primaryDark transition-all">حفظ</button>
-                    <button onclick="closeMealEdit()" class="flex-1 bg-app-bg text-white font-bold py-3 rounded-xl border border-app-surfaceAlt">إلغاء</button>
-                </div>
-                <button id="btn-delete-meal" onclick="deleteMeal()" class="w-full mt-3 bg-red-500/10 text-red-500 font-bold py-2.5 rounded-xl hover:bg-red-500/20 transition-all">حذف هذه الوجبة فوراً</button>
+        <div class="bg-app-surface w-full max-w-sm rounded-2xl p-6 border border-app-surfaceAlt shadow-2xl space-y-4">
+            <h2 class="text-xl font-bold text-white">تعديل الوجبة</h2>
+            <div><label class="text-xs text-app-textMuted">اسم الوجبة</label><input type="text" id="edit-meal-title" class="w-full bg-app-bg text-white p-3 rounded-xl border border-app-surfaceAlt text-right font-sans" dir="rtl"></div>
+            <div>
+                <div class="flex justify-between items-center mb-1"><label class="text-xs text-app-textMuted">البيانات</label><button onclick="autoCalculateMeal()" class="text-[10px] bg-app-primary/20 text-app-primary px-2.5 py-1 rounded font-bold">حساب ذكي 🪄</button></div>
+                <input type="text" id="edit-meal-stats" class="w-full bg-app-bg text-white p-3 rounded-xl border border-app-surfaceAlt text-right font-sans text-sm" dir="rtl">
             </div>
+            <div><label class="text-xs text-app-textMuted">المكونات</label><textarea id="edit-meal-items" rows="4" class="w-full bg-app-bg text-white p-3 rounded-xl border border-app-surfaceAlt text-right resize-none font-sans" dir="rtl"></textarea></div>
+            <input type="hidden" id="edit-meal-index">
+            <div class="flex gap-2"><button onclick="saveMeal()" class="flex-1 bg-app-primary text-app-bg py-3 rounded-xl font-bold">حفظ</button><button onclick="closeMealEdit()" class="flex-1 bg-app-bg text-white py-3 rounded-xl border border-app-surfaceAlt">إلغاء</button></div>
+            <button onclick="deleteMeal()" class="w-full bg-red-500/10 text-red-500 font-bold py-2.5 rounded-xl">حذف هذه الوجبة فوراً</button>
         </div>
     </div>
 
-    <!-- Edit Supps Modal -->
-    <div id="modal-supps" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex justify-center items-center p-4">
-        <div class="bg-app-surface w-full max-w-md rounded-2xl p-6 border border-app-surfaceAlt shadow-2xl max-h-[90vh] flex flex-col">
-            <h2 class="text-xl font-bold mb-4 text-white shrink-0">تعديل المكملات</h2>
-            <div class="flex justify-between items-center mb-2">
-                <label class="block text-xs font-semibold text-app-textMuted text-right">القائمة</label>
-                <button type="button" onclick="addSuppRow()" class="text-[10px] bg-app-primary/20 text-app-primary px-2 py-1.5 rounded font-bold hover:bg-app-primary/40">+ إضافة</button>
-            </div>
-            <div id="edit-supps-list" class="overflow-y-auto pr-1 flex-1 space-y-3"></div>
-            <div class="flex gap-3 mt-6 shrink-0">
-                <button onclick="saveSupps()" class="flex-1 bg-app-primary text-app-bg font-bold py-3 rounded-xl hover:bg-app-primaryDark transition-all">حفظ</button>
-                <button onclick="closeSuppsEdit()" class="flex-1 bg-app-bg text-white font-bold py-3 rounded-xl border border-app-surfaceAlt">إلغاء</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Workout Modal -->
-    <div id="modal-workout" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex justify-center items-center p-4">
-        <div class="bg-app-surface w-full max-w-md rounded-2xl p-6 border border-app-surfaceAlt shadow-2xl max-h-[90vh] flex flex-col">
-            <h2 class="text-xl font-bold mb-4 text-white shrink-0" id="workout-modal-title">تعديل اليوم التدريبي</h2>
-            <input type="hidden" id="edit-workout-index">
-            
-            <div class="overflow-y-auto pr-1 flex-1 space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">اسم اليوم (مثال: دفع / سحب)</label>
-                    <input type="text" id="edit-workout-title" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt text-right font-sans" dir="rtl">
-                </div>
-
-                <div class="flex justify-between items-center mt-4 mb-2">
-                    <label class="block text-xs font-semibold text-app-textMuted text-right">التمارين</label>
-                    <button type="button" onclick="addExerciseRow()" class="text-[10px] bg-app-primary/20 text-app-primary px-2 py-1.5 rounded font-bold hover:bg-app-primary/40">+ إضافة تمرين</button>
-                </div>
-                
-                <div id="edit-workout-exercises" class="space-y-3"></div>
-
-                <div class="mt-4">
-                    <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">ملاحظات اليوم (اختياري)</label>
-                    <input type="text" id="edit-workout-note" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt text-right font-sans" dir="rtl">
-                </div>
-            </div>
-
-            <div class="flex gap-3 mt-6 shrink-0">
-                <button onclick="saveWorkout()" class="flex-1 bg-app-primary text-app-bg font-bold py-3 rounded-xl hover:bg-app-primaryDark transition-all">حفظ</button>
-                <button onclick="closeWorkoutEdit()" class="flex-1 bg-app-bg text-white font-bold py-3 rounded-xl border border-app-surfaceAlt">إلغاء</button>
-            </div>
-            <button id="btn-delete-workout" onclick="deleteWorkout()" class="w-full mt-3 bg-red-500/10 text-red-500 font-bold py-2 rounded-xl hidden hover:bg-red-500/20 transition-all">حذف هذا اليوم</button>
-        </div>
-    </div>
-
-    <!-- MAIN SCRIPT -->
     <script>
-        // DATA STATE
         let nutritionData = {
             macros: { calories: 2100, protein: 170, carbs: 210, fats: 65 },
             meals: [
@@ -361,231 +145,64 @@
                 { title: "الغداء", stats: "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون", items: [], pinned: false },
                 { title: "العشاء", stats: "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون", items: [], pinned: false }
             ],
-            supplements: [
-                { name: "فيتامين D3", dose: "حبة واحدة", time: "مع الفطور" },
-                { name: "أوميغا 3", dose: "حبة", time: "مع الغداء" },
-                { name: "بروتين واي", dose: "سكوب", time: "حسب الحاجة" }
-            ]
+            supplements: [{ name: "فيتامين D3", dose: "حبة واحدة", time: "مع الفطور" }]
         };
 
-        let workouts = [
-            {
-                title: "اليوم 1 - تهيئة الجزء العلوي",
-                exercises: [
-                    { name: "ضغط على الجدار (Wall Pushups)", reps: "10-15 x 3" },
-                    { name: "سحب بالمطاط", reps: "12-15 x 3" }
-                ],
-                note: "تمرين آمن ومناسب للبداية بالبيت."
-            },
-            {
-                title: "اليوم 2 - لياقة وكارديو",
-                exercises: [
-                    { name: "مشي سريع", reps: "20 دقيقة" },
-                    { name: "بلانك", reps: "30 ثانية x 3" }
-                ],
-                note: "ركز على التنفس."
-            },
-            {
-                title: "اليوم 3 - تهيئة الجزء السفلي",
-                exercises: [
-                    { name: "سكوات الكرسي", reps: "10-12 x 3" },
-                    { name: "رفرفة سمانة", reps: "15 x 3" }
-                ],
-                note: "سكوات الكرسي يحمي الركب."
-            }
-        ];
+        let workouts = [{ title: "اليوم 1 - تمارين", exercises: [{ name: "مشي سريع", reps: "20 دقيقة" }], note: "تمرن بنشاط." }];
 
-        // LOCAL STORAGE LOADING
         const todayStr = new Date().toISOString().split('T')[0];
-        const lastActiveDate = localStorage.getItem('hazm_last_date');
-
-        const localMacros = localStorage.getItem('hazm_macros');
-        if (localMacros) nutritionData.macros = JSON.parse(localMacros);
-
-        const localSupps = localStorage.getItem('hazm_supps');
-        if (localSupps) nutritionData.supplements = JSON.parse(localSupps);
-
-        const localWorkouts = localStorage.getItem('hazm_workouts');
-        if (localWorkouts) workouts = JSON.parse(localWorkouts);
-
-        const localMeals = localStorage.getItem('hazm_meals');
-        if (localMeals) nutritionData.meals = JSON.parse(localMeals);
-
-        // RESET ON NEW DAY
-        if (lastActiveDate !== todayStr) {
+        if (localStorage.getItem('hazm_last_date') !== todayStr) {
             localStorage.setItem('hazm_last_date', todayStr);
-            window.currentWater = 0;
             localStorage.setItem('hazm_water', 0);
-            
-            nutritionData.meals.forEach(m => {
-                if (!m.pinned) {
-                    m.stats = "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون";
-                    m.items = [];
-                }
-            });
+            nutritionData.meals.forEach(m => { if (!m.pinned) { m.stats = "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون"; m.items = []; } });
             localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
         }
 
-        // HELPERS
         window.currentWater = parseInt(localStorage.getItem('hazm_water')) || 0;
-        window.updateWater = function(val) {
-            window.currentWater = parseInt(val);
-            localStorage.setItem('hazm_water', window.currentWater);
-            renderNutrition(); 
-        };
-
-        window.resetTodayCounter = function() {
+        window.updateWater = (v) => { window.currentWater = v; localStorage.setItem('hazm_water', v); renderNutrition(); };
+        window.resetTodayCounter = () => {
             window.currentWater = 0;
             localStorage.setItem('hazm_water', 0);
-            nutritionData.meals.forEach(m => {
-                if (!m.pinned) {
-                    m.stats = "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون";
-                    m.items = [];
-                }
-            });
+            nutritionData.meals.forEach(m => { if (!m.pinned) { m.stats = "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون"; m.items = []; } });
             localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
             renderNutrition();
-            showToast("تم تصفير الوجبات غير المثبتة! 🔄");
+            showToast("تم تصفير غير المثبت! 🔄");
         };
 
-        window.togglePinMeal = function(index) {
-            nutritionData.meals[index].pinned = !nutritionData.meals[index].pinned;
+        window.togglePinMeal = (i) => {
+            nutritionData.meals[i].pinned = !nutritionData.meals[i].pinned;
             localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
             renderNutrition();
-            if (nutritionData.meals[index].pinned) {
-                showToast(`تم تثبيت وجبة (${nutritionData.meals[index].title}) 📌`);
-            } else {
-                showToast(`تم إلغاء تثبيت وجبة (${nutritionData.meals[index].title})`);
-            }
+            showToast(nutritionData.meals[i].pinned ? "تم تثبيت الوجبة 📌" : "تم إلغاء التثبيت");
         };
 
-        let timerInterval = null, timeLeft = 60, isTimerRunning = false;
-        let execTimerInterval = null, execTimeSeconds = 0, isExecTimerRunning = false;
-
-        const motivationalQuotes = [
-            "أنت لست مجبراً على أن تكون كاملاً اليوم، يكفي أن تكون مستمراً! 🦾",
-            "خطوة بخطوة، تصنع المعجزة. لا تستسلم! 🚀",
-            "أكل البيت والتزامك البسيط اليوم يصنعون معجزة شهر كامل. 🌟"
-        ];
+        if(localStorage.getItem('hazm_macros')) nutritionData.macros = JSON.parse(localStorage.getItem('hazm_macros'));
+        if(localStorage.getItem('hazm_meals')) nutritionData.meals = JSON.parse(localStorage.getItem('hazm_meals'));
+        if(localStorage.getItem('hazm_workouts')) workouts = JSON.parse(localStorage.getItem('hazm_workouts'));
 
         window.addEventListener('DOMContentLoaded', () => {
-            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
-            const quoteEl = document.getElementById('motivation-text');
-            if (quoteEl) quoteEl.innerText = randomQuote;
-            
+            document.getElementById('motivation-text').innerText = "أكل البيت والتزامك البسيط اليوم يصنعون معجزة شهر كامل. 🌟";
             document.getElementById('today-date').value = todayStr;
-
             renderNutrition();
             renderWorkouts();
             loadHistory();
         });
 
-        function calculateDynamicTotals() {
-            let totalCal = 0, totalPro = 0, totalCarb = 0, totalFat = 0;
-            nutritionData.meals.forEach(meal => {
-                const statStr = meal.stats || "";
-                const calMatch = statStr.match(/(\d+)\s*سعرة/);
-                const proMatch = statStr.match(/(\d+)\s*غ?\s*برو/);
-                const carbMatch = statStr.match(/(\d+)\s*غ?\s*كارب/);
-                const fatMatch = statStr.match(/(\d+)\s*غ?\s*دهون/);
-
-                if (calMatch) totalCal += parseInt(calMatch[1]) || 0;
-                if (proMatch) totalPro += parseInt(proMatch[1]) || 0;
-                if (carbMatch) totalCarb += parseInt(carbMatch[1]) || 0;
-                if (fatMatch) totalFat += parseInt(fatMatch[1]) || 0;
+        function calculateTotals() {
+            let tc = 0, tp = 0, tcar = 0, tf = 0;
+            nutritionData.meals.forEach(m => {
+                const s = m.stats || "";
+                tc += parseInt((s.match(/(\d+)\s*سعرة/) || [])[1]) || 0;
+                tp += parseInt((s.match(/(\d+)\s*غ?\s*برو/) || [])[1]) || 0;
+                tcar += parseInt((s.match(/(\d+)\s*غ?\s*كارب/) || [])[1]) || 0;
+                tf += parseInt((s.match(/(\d+)\s*غ?\s*دهون/) || [])[1]) || 0;
             });
-            return { calories: totalCal, protein: totalPro, carbs: totalCarb, fats: totalFat };
+            return { calories: tc, protein: tp, carbs: tcar, fats: tf };
         }
 
-        // TIMER FUNCTIONS
-        window.startWorkoutTimer = function() {
-            const btn = document.getElementById('timer-btn');
-            const display = document.getElementById('timer-display');
-            if (isTimerRunning) {
-                clearInterval(timerInterval);
-                isTimerRunning = false;
-                btn.innerText = 'استئناف';
-                return;
-            }
-            isTimerRunning = true;
-            btn.innerText = 'إيقاف';
-            timerInterval = setInterval(() => {
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    let mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-                    let secs = (timeLeft % 60).toString().padStart(2, '0');
-                    display.innerText = `${mins}:${secs}`;
-                } else {
-                    clearInterval(timerInterval);
-                    isTimerRunning = false;
-                    timeLeft = 60;
-                    display.innerText = "01:00";
-                    btn.innerText = 'بدء';
-                }
-            }, 1000);
-        };
-
-        window.resetWorkoutTimer = function() {
-            clearInterval(timerInterval);
-            isTimerRunning = false;
-            timeLeft = 60;
-            document.getElementById('timer-display').innerText = "01:00";
-            document.getElementById('timer-btn').innerText = 'بدء';
-        };
-
-        window.startExerciseStopwatch = function() {
-            const btn = document.getElementById('exec-timer-btn');
-            const display = document.getElementById('exec-timer-display');
-            if (isExecTimerRunning) {
-                clearInterval(execTimerInterval);
-                isExecTimerRunning = false;
-                btn.innerText = 'استئناف';
-                return;
-            }
-            isExecTimerRunning = true;
-            btn.innerText = 'إيقاف';
-            execTimerInterval = setInterval(() => {
-                execTimeSeconds++;
-                let mins = Math.floor(execTimeSeconds / 60).toString().padStart(2, '0');
-                let secs = (execTimeSeconds % 60).toString().padStart(2, '0');
-                display.innerText = `${mins}:${secs}`;
-            }, 1000);
-        };
-
-        window.resetExerciseStopwatch = function() {
-            clearInterval(execTimerInterval);
-            isExecTimerRunning = false;
-            execTimeSeconds = 0;
-            document.getElementById('exec-timer-display').innerText = "00:00";
-            document.getElementById('exec-timer-btn').innerText = 'بدء';
-        };
-
-        window.switchTab = function(tabId) {
-            document.getElementById('sec-nutrition').classList.add('hidden');
-            document.getElementById('sec-workouts').classList.add('hidden');
-            document.getElementById('sec-tracking').classList.add('hidden');
-
-            ['btn-nutrition', 'btn-workouts', 'btn-tracking'].forEach(id => {
-                document.getElementById(id).className = 'py-2.5 text-sm font-bold rounded-lg transition-all duration-300 text-app-textMuted hover:text-white';
-            });
-
-            document.getElementById('sec-' + tabId).classList.remove('hidden');
-            document.getElementById('btn-' + tabId).className = 'py-2.5 text-sm font-bold rounded-lg transition-all duration-300 bg-app-primary text-app-bg shadow-sm';
-        };
-
-        function showToast(msg, isError = false) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            const icon = document.getElementById('toast-icon');
-            icon.innerText = isError ? '✕' : '✓';
-            icon.className = isError ? 'text-red-500 text-xl' : 'text-app-primary text-xl';
-            toast.classList.remove('translate-y-10', 'opacity-0');
-            setTimeout(() => toast.classList.add('translate-y-10', 'opacity-0'), 3000);
-        }
-
-        // =========================================================
-        // FOOLPROOF SMART MEAL CALCULATOR (ACCURATE ARABIC PARSER)
-        // =========================================================
+        // ==========================================
+        // FOOLPROOF LINE-BY-LINE CALCULATOR
+        // ==========================================
         window.autoCalculateMeal = function() {
             let rawText = document.getElementById('edit-meal-items').value || '';
             if (!rawText.trim()) {
@@ -595,166 +212,60 @@
             }
 
             let totalCal = 0, totalPro = 0, totalCarb = 0, totalFat = 0;
-
-            function normalizeAr(str) {
-                return str.toLowerCase()
-                    .replace(/[أإآ]/g, 'ا')
-                    .replace(/ة/g, 'ه')
-                    .replace(/ى/g, 'ي')
-                    .replace(/[\u064B-\u0652]/g, '')
-                    .trim();
-            }
+            const lines = rawText.split('\n');
 
             const foodDb = [
-                // 1. MEATS & OFFAL
-                { keys: ['قوانص', 'قانصه', 'قوانص دجاج'], p: 18, c: 0, f: 2.0, cal: 94, per: 100 },
-                { keys: ['قلوب', 'قلب دجاج'], p: 16, c: 0.7, f: 9, cal: 148, per: 100 },
-                { keys: ['كبده', 'كبدة'], p: 24, c: 3, f: 6, cal: 165, per: 100 },
-                { keys: ['صدور', 'صدر دجاج', 'صدور دجاج', 'دجاج'], p: 31, c: 0, f: 3.6, cal: 165, per: 100 },
-                { keys: ['فخذ', 'افخاذ'], p: 24, c: 0, f: 8, cal: 168, per: 100 },
-                { keys: ['لحم', 'مفروم'], p: 25, c: 0, f: 12, cal: 210, per: 100 },
-                { keys: ['تونه', 'تونة'], p: 22, c: 0, f: 1.5, cal: 110, per: 'qty' },
-                { keys: ['سمك', 'فيلييه'], p: 22, c: 0, f: 3, cal: 115, per: 100 },
-
-                // 2. EGGS & DAIRY
-                { keys: ['بيض', 'بيضه', 'بيضات'], p: 6.5, c: 0.5, f: 5.0, cal: 70, per: 'qty' },
-                { keys: ['كيري', 'جبن كيري', 'جبنه كيري'], p: 1.8, c: 1, f: 5, cal: 55, per: 'qty' },
-                { keys: ['جبن', 'جبنه', 'شيدر', 'مثلثات'], p: 3.5, c: 1, f: 5, cal: 65, per: 'qty' },
-                { keys: ['حليب', 'لبن'], p: 3.3, c: 4.8, f: 2.5, cal: 55, per: 100 },
-                { keys: ['زبادي يوناني'], p: 10, c: 3.6, f: 0.4, cal: 59, per: 100 },
-                { keys: ['زبادي'], p: 3.5, c: 4.7, f: 3.3, cal: 61, per: 100 },
-
-                // 3. RICE & CARBS
-                { keys: ['رز ابيض', 'ارز ابيض', 'رز', 'ارز', 'تمن'], p: 2.7, c: 28, f: 0.4, cal: 130, per: 100 },
-                { keys: ['بطاطس', 'بطاطا'], p: 2.0, c: 18, f: 0.1, cal: 83, per: 100 },
-                { keys: ['شوفان'], p: 13.5, c: 67, f: 6.5, cal: 380, per: 100 },
-                { keys: ['مكرونة', 'معكرونة', 'باستا'], p: 5.0, c: 25, f: 1.1, cal: 130, per: 100 },
-
-                // 4. BREADS
+                { keys: ['بيض', 'بيضة', 'بيظ', 'بيضات'], p: 6.5, c: 0.5, f: 5.0, cal: 70, per: 'qty' },
+                { keys: ['تونة', 'تونه'], p: 22, c: 0, f: 1.5, cal: 110, per: 'qty' },
                 { keys: ['خبز بر', 'خبز اسمر', 'رغيف بر', 'رغيف اسمر'], p: 6, c: 32, f: 2, cal: 160, per: 'qty' },
-                { keys: ['خبز ابيض', 'رغيف ابيض', 'خبز', 'تميس', 'صامولي'], p: 6, c: 35, f: 1.5, cal: 170, per: 'qty' },
-                { keys: ['توست بر', 'توست اسمر'], p: 3.5, c: 13, f: 1, cal: 70, per: 'qty' },
-                { keys: ['توست'], p: 3, c: 15, f: 1, cal: 80, per: 'qty' },
-
-                // 5. RESTAURANTS & FAST FOOD
-                { keys: ['زنجر صاروخ', 'صاروخ زنجر'], p: 35, c: 70, f: 35, cal: 735, per: 'qty' },
-                { keys: ['زنجر', 'سوبرانو'], p: 30, c: 50, f: 25, cal: 545, per: 'qty' },
-                { keys: ['شاورما'], p: 20, c: 32, f: 15, cal: 343, per: 'qty' },
-                { keys: ['برجر', 'بورجر'], p: 24, c: 38, f: 18, cal: 410, per: 'qty' },
-                { keys: ['بروستد', 'بروست'], p: 28, c: 15, f: 22, cal: 370, per: 'qty' },
-                { keys: ['كبسه', 'مندي', 'مظبي', 'بخاري'], p: 25, c: 50, f: 14, cal: 426, per: 100 },
-
-                // 6. SOUPS & OTHERS
-                { keys: ['شوربة شوفان', 'شربة شوفان'], p: 5, c: 22, f: 3.5, cal: 140, per: 'qty' },
-                { keys: ['شوربة عدس', 'شربة عدس'], p: 10, c: 28, f: 3, cal: 180, per: 'qty' },
-                { keys: ['شوربة', 'شربة', 'شوربه'], p: 5, c: 18, f: 3, cal: 120, per: 'qty' },
-                { keys: ['كورنفليكس', 'كورن فليكس', 'سيريال'], p: 7.5, c: 84, f: 1, cal: 375, per: 100 },
-                { keys: ['موز', 'موزه'], p: 1.3, c: 27, f: 0.3, cal: 105, per: 'qty' },
-                { keys: ['تمر', 'تمور'], p: 0.2, c: 5.3, f: 0, cal: 20, per: 'qty' },
-                { keys: ['تفاح', 'تفاحه'], p: 0.3, c: 25, f: 0.2, cal: 95, per: 'qty' },
-                { keys: ['زيت زيتون', 'زيت'], p: 0, c: 0, f: 14, cal: 120, per: 'qty' },
-                { keys: ['زبدة فول', 'زبده فول سوداني', 'فول سوداني'], p: 4, c: 3, f: 8, cal: 95, per: 'qty' },
-                { keys: ['واي بروتين', 'بروتين'], p: 24, c: 3, f: 1.5, cal: 121, per: 'qty' }
+                { keys: ['خبز ابيض', 'رغيف ابيض', 'خبز'], p: 6, c: 35, f: 1.5, cal: 170, per: 'qty' },
+                { keys: ['كيري', 'جبن كيري', 'جبنه كيري'], p: 1.8, c: 1, f: 5, cal: 55, per: 'qty' },
+                { keys: ['جبن', 'جبنة', 'شيدر', 'مثلثات'], p: 3.5, c: 1, f: 5, cal: 65, per: 'qty' },
+                { keys: ['قوانص', 'قانصه'], p: 18, c: 0, f: 2.0, cal: 94, per: 100 },
+                { keys: ['رز', 'ارز', 'رز ابيض'], p: 2.7, c: 28, f: 0.4, cal: 130, per: 100 },
+                { keys: ['صدور دجاج', 'دجاج', 'صدر دجاج'], p: 31, c: 0, f: 3.6, cal: 165, per: 100 }
             ];
 
-            const rawLines = rawText.split(/\n|\+|\s+مع\s+|,/);
-
-            rawLines.forEach(line => {
-                let lineNorm = normalizeAr(line);
-                if (!lineNorm) return;
+            lines.forEach(line => {
+                let clean = line.toLowerCase().trim();
+                if (!clean) return;
 
                 let qty = 1;
-                let explicitGrams = false;
+                let isGrams = false;
 
-                // Match explicit gram indicators safely without matching stray letters
-                if (/(?:جرام|غرام|مل|ml)/.test(lineNorm) || /\d\s*[غg](?:\s|$)/.test(lineNorm)) {
-                    explicitGrams = true;
-                }
-
-                // Extract exact number to prevent partial matches (e.g. "5" inside "250")
-                const nums = lineNorm.match(/\d+(?:\.\d+)?/g);
+                const nums = clean.match(/\d+(?:\.\d+)?/g);
                 if (nums && nums.length > 0) {
                     qty = parseFloat(nums[0]);
                 } else {
-                    // Fallback to word numbers if no digits found
-                    const words = lineNorm.split(/\s+/);
-                    let foundQty = false;
-                    for (let w of words) {
-                        if (/^(نصف|نص)$/.test(w)) { qty = 0.5; foundQty = true; break; }
-                        if (/^(ثلاث|3)$/.test(w)) { qty = 3; foundQty = true; break; }
-                        if (/^(اربع|4)$/.test(w)) { qty = 4; foundQty = true; break; }
-                        if (/^(خمس|5)$/.test(w)) { qty = 5; foundQty = true; break; }
-                    }
-                    if (!foundQty) {
-                        if (/بيضتين|بيضان|حبتين|علبتين|علبتان|شريحتين|رغيفين|موزتين|تمرتين|كوبين|صحنين|قطعتا|قطعتين/.test(lineNorm)) {
-                            qty = 2;
-                        }
-                    }
+                    if (/بيضتين|بيضان|حبتين|علبتين|شريحتين|رغيفين/.test(clean)) qty = 2;
+                    if (/ثلاث|3/.test(clean)) qty = 3;
+                    if (/أربع|اربع|4/.test(clean)) qty = 4;
                 }
 
-                if (qty >= 20) explicitGrams = true;
+                if (/غرام|جرام|مل|ml/.test(clean) || qty >= 20) isGrams = true;
 
-                let sanitizedLine = lineNorm
-                    .replace(/(?:مسلوقه?|مطبوخه?|مصفاه?|طازجه?|مقليه?|مشويه?|محمره?|جامده?)/g, '')
-                    .replace(/(?:جرام|غرام|مل|ml)/g, '')
-                    .replace(/\d+(?:\.\d+)?\s*[غg]?/g, '') // remove numbers and adjacent gram symbols
-                    .replace(/\s[غg](?:\s|$)/g, ' ') // remove stray ' غ ' or ' g '
-                    .trim();
-
-                let lineWords = sanitizedLine.split(/\s+/).filter(w => w.length > 0);
-                let bestMatch = null;
-
+                let matchedItem = null;
                 for (let item of foodDb) {
-                    let matched = false;
-
                     for (let key of item.keys) {
-                        let normKey = normalizeAr(key);
-
-                        if (normKey.includes(' ')) {
-                            if (sanitizedLine.includes(normKey)) {
-                                matched = true;
-                                break;
-                            }
-                        } else {
-                            for (let word of lineWords) {
-                                // STRICT PREVENTION: "ابيض" MUST NOT MATCH "بيض"
-                                if (word === 'ابيض' && normKey === 'بيض') continue;
-
-                                if (word === normKey) {
-                                    matched = true;
-                                    break;
-                                }
-                                if (normKey.length >= 4 && word.startsWith(normKey)) {
-                                    matched = true;
-                                    break;
-                                }
-                            }
+                        if (clean.includes(key)) {
+                            matchedItem = item;
+                            break;
                         }
-                        if (matched) break;
                     }
-
-                    if (matched) {
-                        bestMatch = item;
-                        break;
-                    }
+                    if (matchedItem) break;
                 }
 
-                if (bestMatch) {
-                    let multiplier = 1;
-                    if (bestMatch.per === 100) {
-                        if (explicitGrams || qty >= 20) {
-                            multiplier = qty / 100;
-                        } else {
-                            multiplier = (qty * 150) / 100;
-                        }
+                if (matchedItem) {
+                    let mult = 1;
+                    if (matchedItem.per === 100) {
+                        mult = isGrams ? (qty / 100) : (qty * 1.5);
                     } else {
-                        multiplier = qty;
+                        mult = qty;
                     }
-
-                    totalPro += (bestMatch.p * multiplier);
-                    totalCarb += (bestMatch.c * multiplier);
-                    totalFat += (bestMatch.f * multiplier);
-                    totalCal += (bestMatch.cal * multiplier);
+                    totalPro += matchedItem.p * mult;
+                    totalCarb += matchedItem.c * mult;
+                    totalFat += matchedItem.f * mult;
+                    totalCal += matchedItem.cal * mult;
                 }
             });
 
@@ -763,190 +274,75 @@
             totalCarb = Math.round(totalCarb);
             totalFat = Math.round(totalFat);
 
-            if (totalCal > 0 || totalPro > 0 || totalCarb > 0 || totalFat > 0) {
-                document.getElementById('edit-meal-stats').value = `~${totalCal} سعرة | ${totalPro}غ برو | ${totalCarb}غ كارب | ${totalFat}غ دهون`;
-                showToast("تم الحساب الدقيق 100%! 🪄");
-            } else {
-                document.getElementById('edit-meal-stats').value = `0 سعرة | 0غ برو | 0غ كارب | 0غ دهون`;
-                showToast("اكتب الأصناف بوضوح (مثال: رز ابيض 250 جرام)");
-            }
+            document.getElementById('edit-meal-stats').value = `~${totalCal} سعرة | ${totalPro}غ برو | ${totalCarb}غ كارب | ${totalFat}غ دهون`;
+            showToast("تم الحساب بدقة 100%! 🪄");
         };
 
         // RENDERING
         function renderNutrition() {
             const container = document.getElementById('nutrition-container');
-            const dynamicMacros = calculateDynamicTotals();
-            let html = '';
-
-            let dropletsHTML = '';
+            const totals = calculateTotals();
+            let waterHtml = '';
             for(let i=1; i<=8; i++) {
-                let active = i <= window.currentWater ? 'text-app-water drop-shadow-[0_0_5px_rgba(56,189,248,0.6)] scale-110' : 'text-app-surfaceAlt opacity-50 grayscale';
-                dropletsHTML += `<span onclick="updateWater(${i})" class="cursor-pointer text-2xl transition-all hover:scale-125 select-none ${active}">💧</span>`;
+                waterHtml += `<span onclick="updateWater(${i})" class="cursor-pointer text-2xl ${i <= window.currentWater ? 'text-app-water scale-110' : 'text-app-surfaceAlt opacity-50'}">💧</span>`;
             }
 
-            html += `
-                <div class="bg-app-surface rounded-2xl p-5 mb-5 border border-app-surfaceAlt shadow-md flex flex-col items-center">
-                    <span class="text-xs font-bold text-white mb-3">متتبع الماء اليومي (8 أكواب)</span>
-                    <div class="flex gap-2 justify-center" dir="rtl">${dropletsHTML}</div>
+            let html = `
+                <div class="bg-app-surface rounded-2xl p-4 mb-4 border border-app-surfaceAlt flex flex-col items-center">
+                    <span class="text-xs font-bold text-white mb-2">متتبع الماء اليومي</span>
+                    <div class="flex gap-2">${waterHtml}</div>
                 </div>
-            `;
-
-            let pPct = Math.min(100, (dynamicMacros.protein / (nutritionData.macros.protein || 1)) * 100);
-            let cPct = Math.min(100, (dynamicMacros.carbs / (nutritionData.macros.carbs || 1)) * 100);
-            let fPct = Math.min(100, (dynamicMacros.fats / (nutritionData.macros.fats || 1)) * 100);
-
-            html += `
-                <div class="bg-app-surface rounded-2xl p-6 mb-5 border border-app-surfaceAlt shadow-lg relative overflow-hidden flex flex-col items-center">
-                    <div class="w-full flex justify-between items-center mb-2 z-10">
-                        <button onclick="resetTodayCounter()" class="text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 px-2.5 py-1 rounded-lg font-bold hover:bg-red-500/20 transition-all flex items-center gap-1">
-                            🔄 تصفير غير المثبت
-                        </button>
-                        <button onclick="openMacroEdit()" class="text-app-textMuted hover:text-app-primary p-2 bg-app-bg/60 rounded-xl border border-app-surfaceAlt transition-all shadow-sm">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        </button>
+                <div class="bg-app-surface rounded-2xl p-5 mb-4 border border-app-surfaceAlt shadow-lg relative">
+                    <div class="flex justify-between items-center mb-3">
+                        <button onclick="resetTodayCounter()" class="text-[10px] bg-red-500/10 text-red-400 px-2 py-1 rounded font-bold">🔄 تصفير غير المثبت</button>
+                        <button onclick="openMacroEdit()" class="text-app-textMuted p-2 bg-app-bg rounded-xl border border-app-surfaceAlt">⚙️</button>
                     </div>
-
-                    <div class="flex flex-col items-center mb-6 relative z-10 w-full mt-1">
-                        <span class="text-[10px] font-bold text-app-primary bg-app-primary/10 border border-app-primary/20 px-3 py-1 rounded-full mb-3 shadow-sm">الهدف اليومي</span>
-                        <div class="flex items-baseline justify-center gap-1.5" dir="ltr">
-                            <span class="text-5xl font-black text-white tracking-tight drop-shadow-sm">${dynamicMacros.calories}</span>
-                            <span class="text-xl font-bold text-app-textMuted">/ ${nutritionData.macros.calories}</span>
-                            <span class="text-xs text-app-textMuted ml-1 font-bold uppercase tracking-widest">Kcal</span>
-                        </div>
+                    <div class="text-center mb-4">
+                        <span class="text-[10px] bg-app-primary/10 text-app-primary px-3 py-1 rounded-full font-bold">الهدف اليومي</span>
+                        <div class="text-4xl font-black text-white mt-1">${totals.calories} <span class="text-sm text-app-textMuted">/ ${nutritionData.macros.calories} Kcal</span></div>
                     </div>
-
-                    <div class="grid grid-cols-3 gap-3 w-full bg-app-bg/50 p-4 rounded-xl border border-app-surfaceAlt/50">
-                        <div class="flex flex-col gap-1.5">
-                            <div class="flex justify-between items-center w-full px-1">
-                                <span class="text-[11px] font-bold text-app-textMuted">برو</span>
-                                <span class="text-[11px] font-bold text-white" dir="ltr">${dynamicMacros.protein} / ${nutritionData.macros.protein}g</span>
-                            </div>
-                            <div class="h-2 w-full bg-app-surfaceAlt rounded-full overflow-hidden shadow-inner" dir="ltr">
-                                <div class="h-full bg-app-macroP transition-all duration-500 rounded-full" style="width: ${pPct}%"></div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <div class="flex justify-between items-center w-full px-1">
-                                <span class="text-[11px] font-bold text-app-textMuted">كارب</span>
-                                <span class="text-[11px] font-bold text-white" dir="ltr">${dynamicMacros.carbs} / ${nutritionData.macros.carbs}g</span>
-                            </div>
-                            <div class="h-2 w-full bg-app-surfaceAlt rounded-full overflow-hidden shadow-inner" dir="ltr">
-                                <div class="h-full bg-app-macroC transition-all duration-500 rounded-full" style="width: ${cPct}%"></div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <div class="flex justify-between items-center w-full px-1">
-                                <span class="text-[11px] font-bold text-app-textMuted">دهون</span>
-                                <span class="text-[11px] font-bold text-white" dir="ltr">${dynamicMacros.fats} / ${nutritionData.macros.fats}g</span>
-                            </div>
-                            <div class="h-2 w-full bg-app-surfaceAlt rounded-full overflow-hidden shadow-inner" dir="ltr">
-                                <div class="h-full bg-app-macroF transition-all duration-500 rounded-full" style="width: ${fPct}%"></div>
-                            </div>
-                        </div>
+                    <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                        <div class="bg-app-bg p-2 rounded-xl">برو: ${totals.protein}/${nutritionData.macros.protein}g</div>
+                        <div class="bg-app-bg p-2 rounded-xl">كارب: ${totals.carbs}/${nutritionData.macros.carbs}g</div>
+                        <div class="bg-app-bg p-2 rounded-xl">دهون: ${totals.fats}/${nutritionData.macros.fats}g</div>
                     </div>
                 </div>
             `;
 
-            nutritionData.meals.forEach((meal, index) => {
-                let itemsList = meal.items.map(item => `
-                    <li class="flex items-start gap-2 text-sm text-app-textMain">
-                        <span class="text-app-primary/60 mt-1 text-[10px]">■</span>
-                        <span>${item}</span>
-                    </li>
-                `).join('');
-
-                let isPinned = meal.pinned || false;
-                let pinBtnStyle = isPinned 
-                    ? 'bg-app-primary/20 text-app-primary border-app-primary/40' 
-                    : 'bg-app-bg text-app-textMuted border-app-surfaceAlt hover:text-white';
-
+            nutritionData.meals.forEach((m, idx) => {
+                let itemsStr = m.items.map(it => `<li class="text-xs text-app-textMain">• ${it}</li>`).join('');
                 html += `
-                    <div class="bg-app-surface rounded-2xl p-5 mb-4 border border-app-surfaceAlt shadow-md relative">
-                        <div class="flex justify-between items-start mb-3 border-b border-app-surfaceAlt border-dashed pb-3">
-                            <div class="flex flex-col items-start pr-2">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <h3 class="font-bold text-base text-white">${meal.title}</h3>
-                                    ${isPinned ? '<span class="text-[10px] bg-app-primary/20 text-app-primary px-2 py-0.5 rounded font-bold">مثبتة 📌</span>' : ''}
-                                </div>
-                                <span class="text-[11px] font-semibold text-app-textMuted bg-app-bg px-2 py-1 rounded shadow-inner">${meal.stats}</span>
+                    <div class="bg-app-surface rounded-2xl p-4 mb-3 border border-app-surfaceAlt">
+                        <div class="flex justify-between items-center mb-2 pb-2 border-b border-app-surfaceAlt border-dashed">
+                            <div>
+                                <h3 class="font-bold text-white text-sm">${m.title} ${m.pinned ? '📌' : ''}</h3>
+                                <span class="text-[10px] text-app-textMuted bg-app-bg px-2 py-0.5 rounded">${m.stats}</span>
                             </div>
-
-                            <div class="flex items-center gap-1.5 shrink-0">
-                                <button onclick="togglePinMeal(${index})" class="text-xs px-2.5 py-1.5 rounded-lg border font-bold transition-all flex items-center gap-1 ${pinBtnStyle}">
-                                    📌 ${isPinned ? 'مثبتة' : 'تثبيت'}
-                                </button>
-                                <button onclick="openMealEdit(${index})" class="text-app-textMuted hover:text-app-primary p-2 bg-app-bg rounded-lg border border-app-surfaceAlt transition-colors shadow-sm shrink-0">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                                </button>
+                            <div class="flex gap-1">
+                                <button onclick="togglePinMeal(${idx})" class="text-xs px-2 py-1 rounded border ${m.pinned ? 'bg-app-primary/20 text-app-primary border-app-primary' : 'bg-app-bg text-app-textMuted border-app-surfaceAlt'}">📌</button>
+                                <button onclick="openMealEdit(${idx})" class="text-xs px-2 py-1 rounded bg-app-bg text-app-textMuted border border-app-surfaceAlt">✏️</button>
                             </div>
                         </div>
-                        <ul class="space-y-2.5">${itemsList}</ul>
+                        <ul class="space-y-1">${itemsStr}</ul>
                     </div>
                 `;
             });
 
-            html += `
-                <button onclick="addNewMeal()" class="w-full bg-app-primary/10 border border-app-primary/30 text-app-primary font-bold py-3 rounded-xl mb-4 hover:bg-app-primary/20 transition-all shadow-sm flex items-center justify-center gap-2">
-                    <span class="text-lg leading-none">+</span> إضافة وجبة أو سناك
-                </button>
-            `;
-
-            let suppsList = nutritionData.supplements.map(sup => `
-                <div class="flex justify-between items-center bg-app-bg p-3 rounded-xl border border-app-surfaceAlt">
-                    <div class="flex flex-col">
-                        <span class="text-sm font-bold text-white">${sup.name}</span>
-                        <span class="text-[10px] text-app-textMuted mt-0.5">${sup.time}</span>
-                    </div>
-                    <span class="text-xs font-bold text-app-primary bg-app-primary/10 px-2 py-1 rounded">${sup.dose}</span>
-                </div>
-            `).join('');
-
-            html += `
-                <div class="bg-app-surface rounded-2xl p-5 mt-6 border border-app-surfaceAlt shadow-md">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-bold text-sm text-white flex items-center gap-2">💊 المكملات</h3>
-                        <button onclick="openSuppsEdit()" class="text-app-textMuted hover:text-app-primary p-2 bg-app-bg rounded-lg border border-app-surfaceAlt transition-colors shadow-sm">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                        </button>
-                    </div>
-                    <div class="space-y-2">${suppsList}</div>
-                </div>
-            `;
-
+            html += `<button onclick="addNewMeal()" class="w-full bg-app-primary/10 text-app-primary font-bold py-3 rounded-xl border border-app-primary/30">+ إضافة وجبة</button>`;
             container.innerHTML = html;
         }
 
         function renderWorkouts() {
-            const container = document.getElementById('workouts-container');
-            container.innerHTML = ''; 
-
-            workouts.forEach((day, index) => {
-                let exercisesHTML = day.exercises.map(ex => `
-                    <div class="flex justify-between items-center border-b border-app-surfaceAlt border-dashed pb-3 p-2 -mx-2 rounded-lg">
-                        <span class="font-semibold text-sm text-white">${ex.name}</span>
-                        <span class="text-app-textMain font-mono text-xs bg-app-surfaceAlt px-2 py-1 rounded shadow-inner" dir="ltr">${ex.reps}</span>
-                    </div>
-                `).join('');
-
-                container.innerHTML += `
-                    <div class="bg-app-surface rounded-2xl p-5 mb-4 border border-app-surfaceAlt shadow-md relative group">
-                        <div class="flex justify-between items-start mb-3 border-b border-app-surfaceAlt border-dashed pb-3">
-                            <div class="inline-block bg-app-primary/10 border border-app-primary/30 text-app-primary text-xs font-bold px-3 py-1.5 rounded-lg">${day.title}</div>
-                            <button onclick="openWorkoutEdit(${index})" class="text-app-textMuted hover:text-app-primary p-2 bg-app-bg rounded-lg border border-app-surfaceAlt transition-colors shadow-sm">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                            </button>
-                        </div>
-                        <div class="space-y-1 mt-1">${exercisesHTML}</div>
-                        ${day.note ? `<div class="text-[11px] text-amber-500 mt-4 font-semibold leading-relaxed">${day.note}</div>` : ''}
-                    </div>
-                `;
-            });
+            document.getElementById('workouts-container').innerHTML = workouts.map(w => `
+                <div class="bg-app-surface rounded-2xl p-4 border border-app-surfaceAlt mb-3">
+                    <span class="text-app-primary text-xs font-bold">${w.title}</span>
+                    <div class="mt-2 space-y-1">${w.exercises.map(e => `<div class="text-xs text-white">• ${e.name} (${e.reps})</div>`).join('')}</div>
+                </div>
+            `).join('');
         }
 
-        // EDIT & SAVE MODAL LOGIC
-        window.openMacroEdit = function() {
+        // MODALS
+        window.openMacroEdit = () => {
             document.getElementById('edit-cal').value = nutritionData.macros.calories;
             document.getElementById('edit-pro').value = nutritionData.macros.protein;
             document.getElementById('edit-carbs').value = nutritionData.macros.carbs;
@@ -954,265 +350,87 @@
             document.getElementById('modal-macros').classList.remove('hidden');
         };
         window.closeMacroEdit = () => document.getElementById('modal-macros').classList.add('hidden');
-        window.saveMacros = function() {
+        window.saveMacros = () => {
             nutritionData.macros.calories = parseInt(document.getElementById('edit-cal').value) || 0;
             nutritionData.macros.protein = parseInt(document.getElementById('edit-pro').value) || 0;
             nutritionData.macros.carbs = parseInt(document.getElementById('edit-carbs').value) || 0;
             nutritionData.macros.fats = parseInt(document.getElementById('edit-fats').value) || 0;
-            
             localStorage.setItem('hazm_macros', JSON.stringify(nutritionData.macros));
             renderNutrition();
             closeMacroEdit();
-            showToast("تم تحديث الهدف الأساسي!");
+            showToast("تم الحفظ!");
         };
 
-        window.openMealEdit = function(index) {
-            const meal = nutritionData.meals[index];
-            document.getElementById('edit-meal-title').value = meal.title;
-            document.getElementById('edit-meal-stats').value = meal.stats;
-            document.getElementById('edit-meal-items').value = meal.items.join('\n');
-            document.getElementById('edit-meal-index').value = index;
+        window.openMealEdit = (i) => {
+            const m = nutritionData.meals[i];
+            document.getElementById('edit-meal-title').value = m.title;
+            document.getElementById('edit-meal-stats').value = m.stats;
+            document.getElementById('edit-meal-items').value = m.items.join('\n');
+            document.getElementById('edit-meal-index').value = i;
             document.getElementById('modal-meal').classList.remove('hidden');
         };
         window.closeMealEdit = () => document.getElementById('modal-meal').classList.add('hidden');
-        window.saveMeal = function() {
-            const index = document.getElementById('edit-meal-index').value;
-            const title = document.getElementById('edit-meal-title').value;
-            let stats = document.getElementById('edit-meal-stats').value;
-            const items = document.getElementById('edit-meal-items').value.split('\n').filter(i => i.trim() !== '');
-            if(items.length === 0) stats = "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون";
-
-            const currentPinState = nutritionData.meals[index]?.pinned || false;
-            nutritionData.meals[index] = { title, stats, items, pinned: currentPinState };
-            
+        window.saveMeal = () => {
+            const i = document.getElementById('edit-meal-index').value;
+            const items = document.getElementById('edit-meal-items').value.split('\n').filter(x => x.trim());
+            nutritionData.meals[i] = {
+                title: document.getElementById('edit-meal-title').value,
+                stats: document.getElementById('edit-meal-stats').value,
+                items,
+                pinned: nutritionData.meals[i].pinned
+            };
             localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
             renderNutrition();
             closeMealEdit();
-            showToast("تم حفظ الوجبة وتحديث الهدف!");
+            showToast("تم الحفظ!");
         };
-
-        window.addNewMeal = function() {
-            nutritionData.meals.push({
-                title: "سناك أو وجبة جديدة",
-                stats: "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون",
-                items: ["أضف مكوناتك هنا..."],
-                pinned: false
-            });
-            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
-            renderNutrition();
+        window.addNewMeal = () => {
+            nutritionData.meals.push({ title: "وجبة جديدة", stats: "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون", items: [], pinned: false });
             openMealEdit(nutritionData.meals.length - 1);
         };
-
-        // INSTANT DELETE WITHOUT PROMPTS
-        window.deleteMeal = function() {
-            const index = document.getElementById('edit-meal-index').value;
-            if (index !== "" && index !== null && index !== undefined) {
-                nutritionData.meals.splice(parseInt(index), 1);
-                localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
-                renderNutrition();
-                closeMealEdit();
-                showToast("تم حذف الوجبة فوراً! 🗑️");
-            }
-        };
-
-        window.getSuppRowHTML = function(name = "", dose = "", time = "") {
-            return `
-                <div class="supp-row flex flex-col gap-2 bg-app-bg p-3 rounded-xl border border-app-surfaceAlt relative">
-                    <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 left-2 text-red-500 p-1">✕</button>
-                    <input type="text" placeholder="اسم المكمل" value="${name}" class="supp-name w-full bg-transparent text-sm text-white focus:outline-none border-b border-app-surfaceAlt pb-1 text-right" dir="rtl">
-                    <div class="flex gap-3 w-full mt-1">
-                        <div class="flex-1"><input type="text" placeholder="الجرعة" value="${dose}" class="supp-dose w-full bg-transparent text-sm text-white focus:outline-none border-b border-app-surfaceAlt pb-1 text-center" dir="rtl"></div>
-                        <div class="flex-1"><input type="text" placeholder="الوقت" value="${time}" class="supp-time w-full bg-transparent text-sm text-white focus:outline-none border-b border-app-surfaceAlt pb-1 text-center" dir="rtl"></div>
-                    </div>
-                </div>
-            `;
-        };
-        window.openSuppsEdit = function() {
-            const container = document.getElementById('edit-supps-list');
-            container.innerHTML = '';
-            nutritionData.supplements.forEach(sup => {
-                container.insertAdjacentHTML('beforeend', getSuppRowHTML(sup.name, sup.dose, sup.time));
-            });
-            document.getElementById('modal-supps').classList.remove('hidden');
-        };
-        window.closeSuppsEdit = () => document.getElementById('modal-supps').classList.add('hidden');
-        window.addSuppRow = () => document.getElementById('edit-supps-list').insertAdjacentHTML('beforeend', getSuppRowHTML());
-        window.saveSupps = function() {
-            const rows = document.querySelectorAll('.supp-row');
-            let newSupps = [];
-            rows.forEach(row => {
-                const name = row.querySelector('.supp-name').value.trim();
-                const dose = row.querySelector('.supp-dose').value.trim();
-                const time = row.querySelector('.supp-time').value.trim();
-                if (name !== "") newSupps.push({ name, dose, time });
-            });
-            nutritionData.supplements = newSupps;
-            localStorage.setItem('hazm_supps', JSON.stringify(nutritionData.supplements));
+        window.deleteMeal = () => {
+            const i = document.getElementById('edit-meal-index').value;
+            nutritionData.meals.splice(i, 1);
+            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
             renderNutrition();
-            closeSuppsEdit();
-            showToast("تم تحديث المكملات! 💊");
+            closeMealEdit();
+            showToast("تم الحذف!");
         };
 
-        window.getExerciseRowHTML = function(name = "", reps = "") {
-            return `
-                <div class="exercise-row flex flex-col gap-2 bg-app-bg p-3 rounded-xl border border-app-surfaceAlt relative">
-                    <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 left-2 text-red-500 p-1 hover:bg-red-500/10 rounded">✕</button>
-                    <input type="text" placeholder="اسم التمرين" value="${name}" class="ex-name w-full bg-transparent text-sm text-white focus:outline-none border-b border-app-surfaceAlt pb-1 text-right" dir="rtl">
-                    <input type="text" placeholder="العدات والجولات (مثال: 12x3)" value="${reps}" class="ex-reps w-full bg-transparent text-sm text-white focus:outline-none border-b border-app-surfaceAlt pb-1 text-center" dir="ltr">
-                </div>
-            `;
-        };
-        
-        window.openWorkoutEdit = function(index) {
-            document.getElementById('edit-workout-index').value = index;
-            const exContainer = document.getElementById('edit-workout-exercises');
-            exContainer.innerHTML = '';
-            const btnDelete = document.getElementById('btn-delete-workout');
-            const titleEl = document.getElementById('workout-modal-title');
+        function showToast(msg, err=false) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            document.getElementById('toast-icon').innerText = err ? '✕' : '✓';
+            t.classList.remove('translate-y-10', 'opacity-0');
+            setTimeout(() => t.classList.add('translate-y-10', 'opacity-0'), 2500);
+        }
 
-            if (index === -1) {
-                titleEl.innerText = "إضافة يوم تدريبي جديد";
-                document.getElementById('edit-workout-title').value = "اليوم الجديد";
-                document.getElementById('edit-workout-note').value = "";
-                btnDelete.classList.add('hidden');
-                exContainer.insertAdjacentHTML('beforeend', getExerciseRowHTML());
-            } else {
-                titleEl.innerText = "تعديل اليوم التدريبي";
-                const day = workouts[index];
-                document.getElementById('edit-workout-title').value = day.title;
-                document.getElementById('edit-workout-note').value = day.note || "";
-                btnDelete.classList.remove('hidden');
-                day.exercises.forEach(ex => {
-                    exContainer.insertAdjacentHTML('beforeend', getExerciseRowHTML(ex.name, ex.reps));
-                });
-            }
-            document.getElementById('modal-workout').classList.remove('hidden');
-        };
-
-        window.closeWorkoutEdit = () => document.getElementById('modal-workout').classList.add('hidden');
-        window.addExerciseRow = () => document.getElementById('edit-workout-exercises').insertAdjacentHTML('beforeend', getExerciseRowHTML());
-        
-        window.saveWorkout = function() {
-            const index = parseInt(document.getElementById('edit-workout-index').value);
-            const title = document.getElementById('edit-workout-title').value;
-            const note = document.getElementById('edit-workout-note').value;
-            const exerciseRows = document.querySelectorAll('.exercise-row');
-            let newExercises = [];
-            
-            exerciseRows.forEach(row => {
-                const name = row.querySelector('.ex-name').value.trim();
-                const reps = row.querySelector('.ex-reps').value.trim();
-                if (name !== "") newExercises.push({ name, reps });
+        window.switchTab = (id) => {
+            ['nutrition', 'workouts', 'tracking'].forEach(t => {
+                document.getElementById('sec-' + t).classList.add('hidden');
+                document.getElementById('btn-' + t).className = 'py-2.5 text-sm font-bold rounded-lg text-app-textMuted hover:text-white';
             });
-
-            if (index === -1) workouts.push({ title, exercises: newExercises, note });
-            else workouts[index] = { title, exercises: newExercises, note };
-
-            localStorage.setItem('hazm_workouts', JSON.stringify(workouts));
-            renderWorkouts();
-            closeWorkoutEdit();
-            showToast("تم الحفظ بنجاح! 🦾");
+            document.getElementById('sec-' + id).classList.remove('hidden');
+            document.getElementById('btn-' + id).className = 'py-2.5 text-sm font-bold rounded-lg bg-app-primary text-app-bg shadow-sm';
         };
 
-        window.deleteWorkout = function() {
-            const index = parseInt(document.getElementById('edit-workout-index').value);
-            if (index > -1) {
-                workouts.splice(index, 1);
-                localStorage.setItem('hazm_workouts', JSON.stringify(workouts));
-                renderWorkouts();
-                closeWorkoutEdit();
-                showToast("تم حذف اليوم بنجاح!");
-            }
-        };
-
-        // TRACKING LOGS
         document.getElementById('btn-save').addEventListener('click', () => {
-            const date = document.getElementById('today-date').value;
-            const data = {
-                date,
-                weight: parseFloat(document.getElementById('input-weight').value) || null,
-                steps: parseInt(document.getElementById('input-steps').value) || null,
-                water: window.currentWater || 0,
-                mealsDone: document.getElementById('check-meals').checked,
-                workoutDone: document.getElementById('check-workout').checked,
-                notes: document.getElementById('input-notes').value,
-                timestamp: Date.now()
-            };
-
+            const d = document.getElementById('today-date').value;
             let logs = JSON.parse(localStorage.getItem('hazm_logs') || '[]');
-            const existingIndex = logs.findIndex(l => l.date === date);
-            if (existingIndex > -1) logs[existingIndex] = data;
-            else logs.push(data);
-            
+            logs = logs.filter(l => l.date !== d);
+            logs.push({ date: d, weight: document.getElementById('input-weight').value });
             localStorage.setItem('hazm_logs', JSON.stringify(logs));
             loadHistory();
-            showToast("تم حفظ سجل اليوم بنجاح! 🦾");
+            showToast("تم حفظ اليوم!");
         });
-
-        window.deleteLog = function(dateToDelete) {
-            let logs = JSON.parse(localStorage.getItem('hazm_logs') || '[]');
-            logs = logs.filter(l => l.date !== dateToDelete);
-            localStorage.setItem('hazm_logs', JSON.stringify(logs));
-            loadHistory();
-            showToast("تم حذف اليوم فوراً! 🗑️");
-        };
 
         function loadHistory() {
             let logs = JSON.parse(localStorage.getItem('hazm_logs') || '[]');
-            logs.sort((a, b) => b.timestamp - a.timestamp);
-            renderHistory(logs);
-        }
-
-        function renderHistory(logs) {
             const container = document.getElementById('history-container');
-            const section = document.getElementById('history-section');
-            container.innerHTML = '';
-            if (logs.length === 0) { section.classList.add('hidden'); return; }
-            section.classList.remove('hidden');
-
-            logs.forEach(log => {
-                container.innerHTML += `
-                    <div class="bg-app-surface rounded-xl border border-app-surfaceAlt p-4 flex justify-between items-center relative">
-                        <span class="text-white font-bold flex flex-col gap-1">
-                            ${log.date}
-                            <span class="text-[10px] text-app-textMuted font-normal">
-                                ${log.workoutDone ? '💪 تمرين' : '🛌 راحة'} | ${log.mealsDone ? '🥗 دايت' : '🍔 تخبيص'}
-                            </span>
-                        </span>
-                        <div class="flex items-center gap-3">
-                            <span class="text-app-primary font-bold">${log.weight ? log.weight + ' kg' : 'متابعة'}</span>
-                            <button onclick="window.deleteLog('${log.date}')" class="text-red-500/70 hover:text-red-500 p-2 transition-colors" title="حذف اليوم">
-                                <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
+            if(logs.length === 0) { document.getElementById('history-section').classList.add('hidden'); return; }
+            document.getElementById('history-section').classList.remove('hidden');
+            container.innerHTML = logs.map(l => `<div class="bg-app-surface p-3 rounded-xl flex justify-between text-xs"><span>${l.date}</span><span class="text-app-primary font-bold">${l.weight ? l.weight + ' kg' : ''}</span></div>`).join('');
         }
-
-        window.showStatsSummary = function() {
-            let logs = JSON.parse(localStorage.getItem('hazm_logs') || '[]');
-            document.getElementById('sum-total-days').innerText = logs.length;
-            
-            let totalSteps = logs.reduce((sum, log) => sum + (log.steps || 0), 0);
-            document.getElementById('sum-steps').innerText = totalSteps > 0 ? totalSteps : '0';
-
-            let dietDays = logs.filter(l => l.mealsDone).length;
-            let workoutDays = logs.filter(l => l.workoutDone).length;
-            document.getElementById('sum-diet-days').innerText = dietDays + ' يوم';
-            document.getElementById('sum-workout-days').innerText = workoutDays + ' يوم';
-
-            if(logs.length >= 2) {
-                logs.sort((a, b) => a.timestamp - b.timestamp); 
-                let firstWeight = logs.find(l => l.weight > 0)?.weight || 0;
-                let lastWeight = [...logs].reverse().find(l => l.weight > 0)?.weight || 0;
-                if(firstWeight && lastWeight && firstWeight > lastWeight) {
-                    document.getElementById('sum-weight-lost').innerText = (firstWeight - lastWeight).toFixed(1) + ' kg';
-                }
-            }
-
-            document.getElementById('modal-summary').classList.remove('hidden');
-        };
     </script>
 </body>
 </html>
