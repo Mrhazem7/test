@@ -313,14 +313,19 @@ function resetUnpinned(){
 function switchTab(tab){
  const allowed=['nutrition','workouts','tracking'];
  if(!allowed.includes(tab))return;
+ allowed.forEach(id=>{
+  const section=$(id);
+  if(section){
+   const active=id===tab;
+   section.classList.toggle('hidden',!active);
+   section.style.setProperty('display',active?'block':'none','important');
+   section.setAttribute('aria-hidden',active?'false':'true');
+  }
+ });
  document.querySelectorAll('.tab[data-tab]').forEach(b=>{
   const active=b.dataset.tab===tab;
   b.classList.toggle('active',active);
   b.setAttribute('aria-selected',active?'true':'false');
- });
- allowed.forEach(id=>{
-  const section=$(id);
-  if(section)section.classList.toggle('hidden',id!==tab);
  });
 }
 function setTimer(){const m=String(Math.floor(timerSeconds/60)).padStart(2,'0'),s=String(timerSeconds%60).padStart(2,'0');$('timerDisplay').textContent=`${m}:${s}`}
@@ -350,9 +355,14 @@ function loadTrackingDate(){
  $('trackMessage').textContent='';
 }
 // Bind navigation directly to each tab to avoid missed delegated clicks on mobile.
+// ربط مباشر بأزرار الأقسام، مع ضبط العرض صراحةً لدعم Safari وGitHub Pages.
 document.querySelectorAll('.tab[data-tab]').forEach(tab=>{
- tab.addEventListener('click',()=>switchTab(tab.dataset.tab));
+ tab.onclick=function(event){
+  event.preventDefault();
+  switchTab(this.dataset.tab);
+ };
 });
+switchTab('nutrition');
 document.addEventListener('click',e=>{
  const water=e.target.closest('[data-water]');if(water){state.water=Number(water.dataset.water)===state.water?Number(water.dataset.water)-1:Number(water.dataset.water);persist();renderWater()}
  const pin=e.target.closest('[data-pin]');if(pin){const m=state.meals.find(x=>x.id===pin.dataset.pin);if(m){m.pinned=!m.pinned;persist();renderMeals()}}
