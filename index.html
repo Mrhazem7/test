@@ -1,436 +1,382 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hazm Fit | تطبيق الابطال</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Cairo', 'sans-serif'] },
-                    colors: {
-                        app: {
-                            bg: '#121212',
-                            surface: '#1c1c1e',
-                            surfaceAlt: '#2c2c2e',
-                            primary: '#4ade80',
-                            primaryDark: '#22c55e',
-                            macroP: '#3b82f6', 
-                            macroC: '#a855f7', 
-                            macroF: '#f59e0b', 
-                            water: '#38bdf8',
-                            warning: '#854d0e',
-                            textMain: '#f3f4f6',
-                            textMuted: '#9ca3af'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { background-color: #121212; color: #f3f4f6; -webkit-tap-highlight-color: transparent; overflow-x: hidden; font-family: 'Cairo', sans-serif; }
-        .animate-fade-in { animation: fadeIn 0.25s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-        input[type="checkbox"] { appearance: none; background-color: #2c2c2e; margin: 0; width: 1.5em; height: 1.5em; border-radius: 0.4em; display: grid; place-content: center; cursor: pointer; transition: all 0.2s ease; }
-        input[type="checkbox"]::before { content: ""; width: 0.8em; height: 0.8em; clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%); transform: scale(0); transition: 120ms transform ease-in-out; background-color: #121212; }
-        input[type="checkbox"]:checked { background-color: #4ade80; }
-        input[type="checkbox"]:checked::before { transform: scale(1); }
-        ::-webkit-scrollbar { width: 0px; background: transparent; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#121212">
+<title>Hazm Fit | التغذية والتمارين</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root{--bg:#121212;--panel:#1c1c1e;--surface:#2c2c2e;--green:#4ade80;--muted:#a1a1aa;--blue:#38bdf8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f4f4f5;font-family:'Cairo',system-ui,sans-serif}
+button,input,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}
+.app{max-width:850px;margin:auto;padding:20px 16px 100px}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.brand{font-size:24px;font-weight:800;letter-spacing:-1px}.brand span{color:var(--green)}.sub{color:var(--muted);font-size:12px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:var(--panel);padding:6px;border-radius:18px;margin-bottom:18px;position:sticky;top:8px;z-index:5}
+.tab{border:0;background:transparent;color:#aaa;padding:10px 5px;border-radius:13px;font-weight:700}.tab.active{background:var(--green);color:#092013}
+.panel,.card{background:var(--panel);border:1px solid #29292c;border-radius:22px;padding:17px;margin-bottom:14px;box-shadow:0 8px 24px #0002}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.section-head h2,.section-head h3{margin:0;font-size:17px;font-weight:800}
+.muted{color:var(--muted)}.small{font-size:12px}.green{color:var(--green)}.row{display:flex;align-items:center;gap:9px}.between{justify-content:space-between}.wrap{flex-wrap:wrap}
+.btn{border:0;border-radius:12px;padding:9px 13px;background:var(--surface);color:#eee;font-weight:700;font-size:13px}.btn.primary{background:var(--green);color:#082013}.btn.danger{background:#3a2022;color:#fca5a5}.btn.ghost{background:transparent;border:1px solid #3a3a3d}
+.icon-btn{border:0;background:var(--surface);color:#eee;border-radius:10px;width:36px;height:36px}
+.progress{height:9px;background:#343438;border-radius:20px;overflow:hidden;margin:12px 0}.progress>i{display:block;height:100%;background:var(--green);border-radius:20px;transition:width .2s}
+.calories{font-size:30px;font-weight:800;line-height:1.4}.macro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.macro{background:#252528;padding:11px;border-radius:14px}.macro b{display:block;font-size:17px}.macro span{font-size:11px;color:var(--muted)}
+.water-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:7px}.water{background:#29292d;border:1px solid #3b3b40;border-radius:12px;padding:10px 0;font-size:20px;filter:grayscale(1);opacity:.5}.water.on{filter:none;opacity:1;border-color:var(--blue);background:#102c39}
+.meal-title{font-weight:800}.meal-items{margin:8px 0 12px;padding-right:18px;color:#c9c9ce;font-size:13px}.meal-items li{margin:3px 0}.meal-stats{font-size:12px;color:#c4c4c9;line-height:1.8}
+.empty{padding:15px;text-align:center;color:var(--muted);font-size:13px}
+.field{width:100%;background:#29292d;border:1px solid #414147;color:#fff;border-radius:12px;padding:10px 12px;outline:none;min-width:0}.field:focus{border-color:var(--green)}label{font-size:12px;color:#bbb;display:block;margin-bottom:5px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.field-wrap{min-width:0}.modal-backdrop{position:fixed;inset:0;background:#000b;z-index:20;display:none;align-items:flex-end;justify-content:center;padding:12px}.modal-backdrop.show{display:flex}.modal{width:min(100%,600px);max-height:90vh;overflow:auto;background:#1c1c1e;border:1px solid #3a3a3d;border-radius:24px;padding:18px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.modal-head h3{margin:0;font-size:18px}.ingredient{display:grid;grid-template-columns:1.5fr repeat(4,.8fr) 34px;gap:6px;align-items:end;margin-bottom:9px}.ingredient .field{padding:8px 6px;font-size:12px}.ingredient label{font-size:10px}.exercise{background:#252528;padding:13px;border-radius:15px;margin-bottom:9px}.timer{font-size:42px;font-weight:800;text-align:center;letter-spacing:2px;margin:8px 0;color:var(--green)}.history-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #333}.hidden{display:none!important}
+@media(min-width:640px){.app{padding-top:28px}.modal-backdrop{align-items:center}.panel,.card{padding:20px}.water{padding:12px 0}}
+@media(max-width:420px){.app{padding-left:11px;padding-right:11px}.panel,.card{padding:14px}.water-grid{gap:4px}.water{font-size:17px}.ingredient{grid-template-columns:1.2fr repeat(4,.7fr) 30px;gap:4px}.ingredient .field{font-size:10px;padding:7px 3px}.macro b{font-size:15px}}
+</style>
 </head>
-<body class="min-h-screen flex justify-center pb-12">
-    <div class="w-full max-w-md px-4 pt-6">
-        <header class="text-center mb-6">
-            <h1 class="text-2xl font-bold mb-1 flex items-center justify-center gap-2">💪 Hazm Fit</h1>
-            <p class="text-app-textMuted text-xs tracking-wide uppercase">BODY RECOMPOSITION</p>
-        </header>
+<body>
+<div class="app">
+  <header class="top"><div><div class="brand">HAZM <span>FIT</span></div><div class="sub">خطوة صغيرة كل يوم تصنع فرقاً</div></div><div class="text-left small muted" id="todayLabel"></div></header>
+  <nav class="tabs" aria-label="التنقل">
+    <button class="tab active" data-tab="nutrition" type="button" role="tab" aria-selected="true">🍎 التغذية</button>
+    <button class="tab" data-tab="workouts" type="button" role="tab" aria-selected="false">💪 التمارين</button>
+    <button class="tab" data-tab="tracking" type="button" role="tab" aria-selected="false">📊 المتابعة</button>
+  </nav>
 
-        <div class="grid grid-cols-3 gap-2 bg-app-surface p-1.5 rounded-xl mb-6 border border-app-surfaceAlt">
-            <button onclick="switchTab('nutrition')" id="btn-nutrition" class="py-2.5 text-sm font-bold rounded-lg bg-app-primary text-app-bg shadow-sm">التغذية</button>
-            <button onclick="switchTab('workouts')" id="btn-workouts" class="py-2.5 text-sm font-bold rounded-lg text-app-textMuted hover:text-white">التمارين</button>
-            <button onclick="switchTab('tracking')" id="btn-tracking" class="py-2.5 text-sm font-bold rounded-lg text-app-textMuted hover:text-white">المتابعة</button>
+  <main>
+    <section id="nutrition">
+      <div class="panel">
+        <div class="section-head"><div><div class="muted small">ملخص اليوم</div><h2>السعرات اليومية</h2></div><div class="row"><button class="icon-btn" id="settingsBtn" title="الأهداف">⚙️</button><button class="icon-btn" id="resetBtn" title="تصفير غير المثبت">🔄</button></div></div>
+        <div class="row between"><div class="calories"><span id="caloriesNow">0</span><span class="muted small"> / </span><span id="caloriesGoal">2100</span></div><span class="green small" id="caloriesLeft">متبقي 2100</span></div>
+        <div class="progress"><i id="calorieBar" style="width:0%"></i></div>
+        <div class="macro-grid">
+          <div class="macro"><span>🥩 البروتين</span><b><span id="proteinNow">0</span><small class="muted"> / </small><span id="proteinGoal">140</span>غ</b><span id="proteinLeft">متبقي 140غ</span></div>
+          <div class="macro"><span>🍚 الكارب</span><b><span id="carbsNow">0</span><small class="muted"> / </small><span id="carbsGoal">220</span>غ</b><span id="carbsLeft">متبقي 220غ</span></div>
+          <div class="macro"><span>🥑 الدهون</span><b><span id="fatNow">0</span><small class="muted"> / </small><span id="fatGoal">65</span>غ</b><span id="fatLeft">متبقي 65غ</span></div>
         </div>
+      </div>
+      <div class="panel">
+        <div class="section-head"><h3>💧 متتبع الماء</h3><span class="muted small"><b id="waterCount">0</b> / 8 أكواب</span></div>
+        <div class="water-grid" id="waterGrid"></div><div class="muted small" style="margin-top:9px">اضغط على الكوب لتسجيله أو إلغاء تسجيله.</div>
+      </div>
+      <div class="section-head" style="padding:3px 3px 0"><h3>🍽️ وجبات اليوم</h3><button class="btn primary" id="addMealBtn">＋ وجبة جديدة</button></div>
+      <div id="mealsList"></div>
+    </section>
 
-        <div class="bg-app-surface border border-app-primary/30 rounded-xl p-3.5 mb-6 text-center shadow-md animate-fade-in">
-            <span class="text-[10px] font-bold text-app-primary block mb-1">💡 رسالة اليوم لتحفيزك</span>
-            <p id="motivation-text" class="text-xs text-app-textMain font-medium leading-relaxed"></p>
+    <section id="workouts" class="hidden">
+      <div class="panel">
+        <div class="section-head"><h2>⏱️ مؤقت الراحة</h2><span class="muted small">60 ثانية</span></div>
+        <div class="timer" id="timerDisplay">01:00</div>
+        <div class="row" style="justify-content:center"><button class="btn primary" id="timerStart">▶ بدء</button><button class="btn" id="timerReset">↺ إعادة</button></div>
+      </div>
+      <div class="section-head"><h3>جدول التمارين</h3><button class="btn primary" id="addExerciseBtn">＋ تمرين</button></div>
+      <div id="workoutList"></div>
+    </section>
+
+    <section id="tracking" class="hidden">
+      <div class="panel">
+        <div class="section-head"><h2>📅 تسجيل اليوم</h2></div>
+        <div class="form-grid">
+          <div class="field-wrap"><label for="trackDate">التاريخ</label><input class="field" type="date" id="trackDate"></div>
+          <div class="field-wrap"><label for="trackWeight">الوزن (كجم)</label><input class="field" type="number" id="trackWeight" min="0" max="500" step="0.1" placeholder="مثال: 75.5"></div>
         </div>
+        <button class="btn primary" id="saveDayBtn" style="width:100%;margin-top:13px">حفظ الآن</button><p class="muted small" id="trackMessage">يُحفظ الوزن تلقائيًا بعد التعديل.</p>
+      </div>
+      <div class="panel"><div class="section-head"><h3>سجل الأيام السابقة</h3><span class="muted small" id="historyCount">0 أيام</span></div><div id="historyList"></div></div>
+    </section>
+  </main>
+</div>
 
-        <!-- NUTRITION -->
-        <section id="sec-nutrition" class="block animate-fade-in">
-            <div id="nutrition-container"></div>
-        </section>
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head"><h3 id="modalTitle">تعديل</h3><button class="icon-btn" id="closeModal" aria-label="إغلاق">✕</button></div>
+    <div id="modalContent"></div>
+    <div class="row" style="margin-top:16px"><button class="btn primary" id="modalSave" style="flex:1">حفظ</button><button class="btn" id="modalCancel">إلغاء</button></div>
+  </div>
+</div>
 
-        <!-- WORKOUTS -->
-        <section id="sec-workouts" class="hidden animate-fade-in">
-            <div class="grid grid-cols-1 gap-3 mb-4">
-                <div class="bg-app-surface rounded-2xl p-4 border border-app-surfaceAlt flex items-center justify-between">
-                    <span class="text-xs font-bold text-white">⏱️ مؤقت الراحة (60 ثانية)</span>
-                    <div class="flex items-center gap-3">
-                        <span id="timer-display" class="text-lg font-black text-app-primary font-mono">01:00</span>
-                        <button onclick="startWorkoutTimer()" id="timer-btn" class="bg-app-primary text-app-bg text-xs font-bold px-3 py-2 rounded-xl">بدء</button>
-                        <button onclick="resetWorkoutTimer()" class="bg-app-surfaceAlt text-white text-xs px-2.5 py-2 rounded-xl">إعادة</button>
-                    </div>
-                </div>
-            </div>
-            <div id="workouts-container"></div>
-        </section>
-
-        <!-- TRACKING -->
-        <section id="sec-tracking" class="hidden animate-fade-in">
-            <div class="bg-app-surface rounded-2xl p-6 border border-app-surfaceAlt shadow-lg mb-6 space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">التاريخ</label>
-                    <input type="date" id="today-date" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt font-sans">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-app-textMuted mb-2 text-right">الوزن (كجم)</label>
-                    <input type="number" id="input-weight" step="0.1" class="w-full bg-app-bg text-app-textMain rounded-xl p-3 border border-app-surfaceAlt text-right font-sans" dir="rtl">
-                </div>
-                <button id="btn-save" class="w-full bg-app-primary text-app-bg font-bold text-lg py-3 rounded-xl mt-2">حفظ اليوم</button>
-            </div>
-            <div id="history-section" class="hidden pb-10">
-                <h3 class="text-sm font-bold text-app-textMain mb-3 px-2">سجل الأيام السابقة</h3>
-                <div id="history-container" class="space-y-3"></div>
-            </div>
-        </section>
-    </div>
-
-    <!-- TOAST -->
-    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-app-surface border border-app-surfaceAlt text-app-textMain font-bold px-6 py-3 rounded-full shadow-2xl transition-all duration-300 translate-y-10 opacity-0 pointer-events-none z-50 flex items-center gap-2">
-        <span class="text-app-primary text-xl" id="toast-icon">✓</span>
-        <span id="toast-msg">تم الحفظ بنجاح! 🦾</span>
-    </div>
-
-    <!-- MACROS MODAL -->
-    <div id="modal-macros" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex justify-center items-center p-4">
-        <div class="bg-app-surface w-full max-w-sm rounded-2xl p-6 border border-app-surfaceAlt shadow-2xl space-y-4">
-            <h2 class="text-xl font-bold text-white">تعديل الهدف اليومي</h2>
-            <div><label class="text-xs text-app-textMuted">السعرات</label><input type="number" id="edit-cal" class="w-full bg-app-bg text-white p-3 rounded-xl border border-app-surfaceAlt text-right font-sans"></div>
-            <div class="grid grid-cols-3 gap-2">
-                <div><label class="text-[10px] text-app-textMuted">دهون</label><input type="number" id="edit-fats" class="w-full bg-app-bg text-white p-2 rounded-xl border border-app-surfaceAlt text-center font-sans"></div>
-                <div><label class="text-[10px] text-app-textMuted">كارب</label><input type="number" id="edit-carbs" class="w-full bg-app-bg text-white p-2 rounded-xl border border-app-surfaceAlt text-center font-sans"></div>
-                <div><label class="text-[10px] text-app-textMuted">برو</label><input type="number" id="edit-pro" class="w-full bg-app-bg text-white p-2 rounded-xl border border-app-surfaceAlt text-center font-sans"></div>
-            </div>
-            <div class="flex gap-2"><button onclick="saveMacros()" class="flex-1 bg-app-primary text-app-bg py-3 rounded-xl font-bold">حفظ</button><button onclick="closeMacroEdit()" class="flex-1 bg-app-bg text-white py-3 rounded-xl border border-app-surfaceAlt">إلغاء</button></div>
-        </div>
-    </div>
-
-    <!-- MEAL MODAL -->
-    <div id="modal-meal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex justify-center items-center p-4">
-        <div class="bg-app-surface w-full max-w-sm rounded-2xl p-6 border border-app-surfaceAlt shadow-2xl space-y-4">
-            <h2 class="text-xl font-bold text-white">تعديل الوجبة</h2>
-            <div><label class="text-xs text-app-textMuted">اسم الوجبة</label><input type="text" id="edit-meal-title" class="w-full bg-app-bg text-white p-3 rounded-xl border border-app-surfaceAlt text-right font-sans" dir="rtl"></div>
-            <div>
-                <div class="flex justify-between items-center mb-1"><label class="text-xs text-app-textMuted">البيانات</label><button onclick="autoCalculateMeal()" class="text-[10px] bg-app-primary/20 text-app-primary px-2.5 py-1 rounded font-bold">حساب ذكي 🪄</button></div>
-                <input type="text" id="edit-meal-stats" class="w-full bg-app-bg text-white p-3 rounded-xl border border-app-surfaceAlt text-right font-sans text-sm" dir="rtl">
-            </div>
-            <div><label class="text-xs text-app-textMuted">المكونات</label><textarea id="edit-meal-items" rows="4" class="w-full bg-app-bg text-white p-3 rounded-xl border border-app-surfaceAlt text-right resize-none font-sans" dir="rtl"></textarea></div>
-            <input type="hidden" id="edit-meal-index">
-            <div class="flex gap-2"><button onclick="saveMeal()" class="flex-1 bg-app-primary text-app-bg py-3 rounded-xl font-bold">حفظ</button><button onclick="closeMealEdit()" class="flex-1 bg-app-bg text-white py-3 rounded-xl border border-app-surfaceAlt">إلغاء</button></div>
-            <button onclick="deleteMeal()" class="w-full bg-red-500/10 text-red-500 font-bold py-2.5 rounded-xl">حذف هذه الوجبة فوراً</button>
-        </div>
-    </div>
-
-    <script>
-        let nutritionData = {
-            macros: { calories: 2100, protein: 170, carbs: 210, fats: 65 },
-            meals: [
-                { title: "الفطور", stats: "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون", items: [], pinned: false },
-                { title: "الغداء", stats: "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون", items: [], pinned: false },
-                { title: "العشاء", stats: "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون", items: [], pinned: false }
-            ],
-            supplements: [{ name: "فيتامين D3", dose: "حبة واحدة", time: "مع الفطور" }]
-        };
-
-        let workouts = [{ title: "اليوم 1 - تمارين", exercises: [{ name: "مشي سريع", reps: "20 دقيقة" }], note: "تمرن بنشاط." }];
-
-        const todayStr = new Date().toISOString().split('T')[0];
-        if (localStorage.getItem('hazm_last_date') !== todayStr) {
-            localStorage.setItem('hazm_last_date', todayStr);
-            localStorage.setItem('hazm_water', 0);
-            nutritionData.meals.forEach(m => { if (!m.pinned) { m.stats = "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون"; m.items = []; } });
-            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
-        }
-
-        window.currentWater = parseInt(localStorage.getItem('hazm_water')) || 0;
-        window.updateWater = (v) => { window.currentWater = v; localStorage.setItem('hazm_water', v); renderNutrition(); };
-        window.resetTodayCounter = () => {
-            window.currentWater = 0;
-            localStorage.setItem('hazm_water', 0);
-            nutritionData.meals.forEach(m => { if (!m.pinned) { m.stats = "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون"; m.items = []; } });
-            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
-            renderNutrition();
-            showToast("تم تصفير غير المثبت! 🔄");
-        };
-
-        window.togglePinMeal = (i) => {
-            nutritionData.meals[i].pinned = !nutritionData.meals[i].pinned;
-            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
-            renderNutrition();
-            showToast(nutritionData.meals[i].pinned ? "تم تثبيت الوجبة 📌" : "تم إلغاء التثبيت");
-        };
-
-        if(localStorage.getItem('hazm_macros')) nutritionData.macros = JSON.parse(localStorage.getItem('hazm_macros'));
-        if(localStorage.getItem('hazm_meals')) nutritionData.meals = JSON.parse(localStorage.getItem('hazm_meals'));
-        if(localStorage.getItem('hazm_workouts')) workouts = JSON.parse(localStorage.getItem('hazm_workouts'));
-
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('motivation-text').innerText = "أكل البيت والتزامك البسيط اليوم يصنعون معجزة شهر كامل. 🌟";
-            document.getElementById('today-date').value = todayStr;
-            renderNutrition();
-            renderWorkouts();
-            loadHistory();
-        });
-
-        function calculateTotals() {
-            let tc = 0, tp = 0, tcar = 0, tf = 0;
-            nutritionData.meals.forEach(m => {
-                const s = m.stats || "";
-                tc += parseInt((s.match(/(\d+)\s*سعرة/) || [])[1]) || 0;
-                tp += parseInt((s.match(/(\d+)\s*غ?\s*برو/) || [])[1]) || 0;
-                tcar += parseInt((s.match(/(\d+)\s*غ?\s*كارب/) || [])[1]) || 0;
-                tf += parseInt((s.match(/(\d+)\s*غ?\s*دهون/) || [])[1]) || 0;
-            });
-            return { calories: tc, protein: tp, carbs: tcar, fats: tf };
-        }
-
-        // ==========================================
-        // FOOLPROOF LINE-BY-LINE CALCULATOR
-        // ==========================================
-        window.autoCalculateMeal = function() {
-            let rawText = document.getElementById('edit-meal-items').value || '';
-            if (!rawText.trim()) {
-                document.getElementById('edit-meal-stats').value = "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون";
-                showToast("الوجبة فارغة", true);
-                return;
-            }
-
-            let totalCal = 0, totalPro = 0, totalCarb = 0, totalFat = 0;
-            const lines = rawText.split('\n');
-
-            const foodDb = [
-                { keys: ['بيض', 'بيضة', 'بيظ', 'بيضات'], p: 6.5, c: 0.5, f: 5.0, cal: 70, per: 'qty' },
-                { keys: ['تونة', 'تونه'], p: 22, c: 0, f: 1.5, cal: 110, per: 'qty' },
-                { keys: ['خبز بر', 'خبز اسمر', 'رغيف بر', 'رغيف اسمر'], p: 6, c: 32, f: 2, cal: 160, per: 'qty' },
-                { keys: ['خبز ابيض', 'رغيف ابيض', 'خبز'], p: 6, c: 35, f: 1.5, cal: 170, per: 'qty' },
-                { keys: ['كيري', 'جبن كيري', 'جبنه كيري'], p: 1.8, c: 1, f: 5, cal: 55, per: 'qty' },
-                { keys: ['جبن', 'جبنة', 'شيدر', 'مثلثات'], p: 3.5, c: 1, f: 5, cal: 65, per: 'qty' },
-                { keys: ['قوانص', 'قانصه'], p: 18, c: 0, f: 2.0, cal: 94, per: 100 },
-                { keys: ['رز', 'ارز', 'رز ابيض'], p: 2.7, c: 28, f: 0.4, cal: 130, per: 100 },
-                { keys: ['صدور دجاج', 'دجاج', 'صدر دجاج'], p: 31, c: 0, f: 3.6, cal: 165, per: 100 }
-            ];
-
-            lines.forEach(line => {
-                let clean = line.toLowerCase().trim();
-                if (!clean) return;
-
-                let qty = 1;
-                let isGrams = false;
-
-                const nums = clean.match(/\d+(?:\.\d+)?/g);
-                if (nums && nums.length > 0) {
-                    qty = parseFloat(nums[0]);
-                } else {
-                    if (/بيضتين|بيضان|حبتين|علبتين|شريحتين|رغيفين/.test(clean)) qty = 2;
-                    if (/ثلاث|3/.test(clean)) qty = 3;
-                    if (/أربع|اربع|4/.test(clean)) qty = 4;
-                }
-
-                if (/غرام|جرام|مل|ml/.test(clean) || qty >= 20) isGrams = true;
-
-                let matchedItem = null;
-                for (let item of foodDb) {
-                    for (let key of item.keys) {
-                        if (clean.includes(key)) {
-                            matchedItem = item;
-                            break;
-                        }
-                    }
-                    if (matchedItem) break;
-                }
-
-                if (matchedItem) {
-                    let mult = 1;
-                    if (matchedItem.per === 100) {
-                        mult = isGrams ? (qty / 100) : (qty * 1.5);
-                    } else {
-                        mult = qty;
-                    }
-                    totalPro += matchedItem.p * mult;
-                    totalCarb += matchedItem.c * mult;
-                    totalFat += matchedItem.f * mult;
-                    totalCal += matchedItem.cal * mult;
-                }
-            });
-
-            totalCal = Math.round(totalCal);
-            totalPro = Math.round(totalPro);
-            totalCarb = Math.round(totalCarb);
-            totalFat = Math.round(totalFat);
-
-            document.getElementById('edit-meal-stats').value = `~${totalCal} سعرة | ${totalPro}غ برو | ${totalCarb}غ كارب | ${totalFat}غ دهون`;
-            showToast("تم الحساب بدقة 100%! 🪄");
-        };
-
-        // RENDERING
-        function renderNutrition() {
-            const container = document.getElementById('nutrition-container');
-            const totals = calculateTotals();
-            let waterHtml = '';
-            for(let i=1; i<=8; i++) {
-                waterHtml += `<span onclick="updateWater(${i})" class="cursor-pointer text-2xl ${i <= window.currentWater ? 'text-app-water scale-110' : 'text-app-surfaceAlt opacity-50'}">💧</span>`;
-            }
-
-            let html = `
-                <div class="bg-app-surface rounded-2xl p-4 mb-4 border border-app-surfaceAlt flex flex-col items-center">
-                    <span class="text-xs font-bold text-white mb-2">متتبع الماء اليومي</span>
-                    <div class="flex gap-2">${waterHtml}</div>
-                </div>
-                <div class="bg-app-surface rounded-2xl p-5 mb-4 border border-app-surfaceAlt shadow-lg relative">
-                    <div class="flex justify-between items-center mb-3">
-                        <button onclick="resetTodayCounter()" class="text-[10px] bg-red-500/10 text-red-400 px-2 py-1 rounded font-bold">🔄 تصفير غير المثبت</button>
-                        <button onclick="openMacroEdit()" class="text-app-textMuted p-2 bg-app-bg rounded-xl border border-app-surfaceAlt">⚙️</button>
-                    </div>
-                    <div class="text-center mb-4">
-                        <span class="text-[10px] bg-app-primary/10 text-app-primary px-3 py-1 rounded-full font-bold">الهدف اليومي</span>
-                        <div class="text-4xl font-black text-white mt-1">${totals.calories} <span class="text-sm text-app-textMuted">/ ${nutritionData.macros.calories} Kcal</span></div>
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs">
-                        <div class="bg-app-bg p-2 rounded-xl">برو: ${totals.protein}/${nutritionData.macros.protein}g</div>
-                        <div class="bg-app-bg p-2 rounded-xl">كارب: ${totals.carbs}/${nutritionData.macros.carbs}g</div>
-                        <div class="bg-app-bg p-2 rounded-xl">دهون: ${totals.fats}/${nutritionData.macros.fats}g</div>
-                    </div>
-                </div>
-            `;
-
-            nutritionData.meals.forEach((m, idx) => {
-                let itemsStr = m.items.map(it => `<li class="text-xs text-app-textMain">• ${it}</li>`).join('');
-                html += `
-                    <div class="bg-app-surface rounded-2xl p-4 mb-3 border border-app-surfaceAlt">
-                        <div class="flex justify-between items-center mb-2 pb-2 border-b border-app-surfaceAlt border-dashed">
-                            <div>
-                                <h3 class="font-bold text-white text-sm">${m.title} ${m.pinned ? '📌' : ''}</h3>
-                                <span class="text-[10px] text-app-textMuted bg-app-bg px-2 py-0.5 rounded">${m.stats}</span>
-                            </div>
-                            <div class="flex gap-1">
-                                <button onclick="togglePinMeal(${idx})" class="text-xs px-2 py-1 rounded border ${m.pinned ? 'bg-app-primary/20 text-app-primary border-app-primary' : 'bg-app-bg text-app-textMuted border-app-surfaceAlt'}">📌</button>
-                                <button onclick="openMealEdit(${idx})" class="text-xs px-2 py-1 rounded bg-app-bg text-app-textMuted border border-app-surfaceAlt">✏️</button>
-                            </div>
-                        </div>
-                        <ul class="space-y-1">${itemsStr}</ul>
-                    </div>
-                `;
-            });
-
-            html += `<button onclick="addNewMeal()" class="w-full bg-app-primary/10 text-app-primary font-bold py-3 rounded-xl border border-app-primary/30">+ إضافة وجبة</button>`;
-            container.innerHTML = html;
-        }
-
-        function renderWorkouts() {
-            document.getElementById('workouts-container').innerHTML = workouts.map(w => `
-                <div class="bg-app-surface rounded-2xl p-4 border border-app-surfaceAlt mb-3">
-                    <span class="text-app-primary text-xs font-bold">${w.title}</span>
-                    <div class="mt-2 space-y-1">${w.exercises.map(e => `<div class="text-xs text-white">• ${e.name} (${e.reps})</div>`).join('')}</div>
-                </div>
-            `).join('');
-        }
-
-        // MODALS
-        window.openMacroEdit = () => {
-            document.getElementById('edit-cal').value = nutritionData.macros.calories;
-            document.getElementById('edit-pro').value = nutritionData.macros.protein;
-            document.getElementById('edit-carbs').value = nutritionData.macros.carbs;
-            document.getElementById('edit-fats').value = nutritionData.macros.fats;
-            document.getElementById('modal-macros').classList.remove('hidden');
-        };
-        window.closeMacroEdit = () => document.getElementById('modal-macros').classList.add('hidden');
-        window.saveMacros = () => {
-            nutritionData.macros.calories = parseInt(document.getElementById('edit-cal').value) || 0;
-            nutritionData.macros.protein = parseInt(document.getElementById('edit-pro').value) || 0;
-            nutritionData.macros.carbs = parseInt(document.getElementById('edit-carbs').value) || 0;
-            nutritionData.macros.fats = parseInt(document.getElementById('edit-fats').value) || 0;
-            localStorage.setItem('hazm_macros', JSON.stringify(nutritionData.macros));
-            renderNutrition();
-            closeMacroEdit();
-            showToast("تم الحفظ!");
-        };
-
-        window.openMealEdit = (i) => {
-            const m = nutritionData.meals[i];
-            document.getElementById('edit-meal-title').value = m.title;
-            document.getElementById('edit-meal-stats').value = m.stats;
-            document.getElementById('edit-meal-items').value = m.items.join('\n');
-            document.getElementById('edit-meal-index').value = i;
-            document.getElementById('modal-meal').classList.remove('hidden');
-        };
-        window.closeMealEdit = () => document.getElementById('modal-meal').classList.add('hidden');
-        window.saveMeal = () => {
-            const i = document.getElementById('edit-meal-index').value;
-            const items = document.getElementById('edit-meal-items').value.split('\n').filter(x => x.trim());
-            nutritionData.meals[i] = {
-                title: document.getElementById('edit-meal-title').value,
-                stats: document.getElementById('edit-meal-stats').value,
-                items,
-                pinned: nutritionData.meals[i].pinned
-            };
-            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
-            renderNutrition();
-            closeMealEdit();
-            showToast("تم الحفظ!");
-        };
-        window.addNewMeal = () => {
-            nutritionData.meals.push({ title: "وجبة جديدة", stats: "0 سعرة | 0غ برو | 0غ كارب | 0غ دهون", items: [], pinned: false });
-            openMealEdit(nutritionData.meals.length - 1);
-        };
-        window.deleteMeal = () => {
-            const i = document.getElementById('edit-meal-index').value;
-            nutritionData.meals.splice(i, 1);
-            localStorage.setItem('hazm_meals', JSON.stringify(nutritionData.meals));
-            renderNutrition();
-            closeMealEdit();
-            showToast("تم الحذف!");
-        };
-
-        function showToast(msg, err=false) {
-            const t = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            document.getElementById('toast-icon').innerText = err ? '✕' : '✓';
-            t.classList.remove('translate-y-10', 'opacity-0');
-            setTimeout(() => t.classList.add('translate-y-10', 'opacity-0'), 2500);
-        }
-
-        window.switchTab = (id) => {
-            ['nutrition', 'workouts', 'tracking'].forEach(t => {
-                document.getElementById('sec-' + t).classList.add('hidden');
-                document.getElementById('btn-' + t).className = 'py-2.5 text-sm font-bold rounded-lg text-app-textMuted hover:text-white';
-            });
-            document.getElementById('sec-' + id).classList.remove('hidden');
-            document.getElementById('btn-' + id).className = 'py-2.5 text-sm font-bold rounded-lg bg-app-primary text-app-bg shadow-sm';
-        };
-
-        document.getElementById('btn-save').addEventListener('click', () => {
-            const d = document.getElementById('today-date').value;
-            let logs = JSON.parse(localStorage.getItem('hazm_logs') || '[]');
-            logs = logs.filter(l => l.date !== d);
-            logs.push({ date: d, weight: document.getElementById('input-weight').value });
-            localStorage.setItem('hazm_logs', JSON.stringify(logs));
-            loadHistory();
-            showToast("تم حفظ اليوم!");
-        });
-
-        function loadHistory() {
-            let logs = JSON.parse(localStorage.getItem('hazm_logs') || '[]');
-            const container = document.getElementById('history-container');
-            if(logs.length === 0) { document.getElementById('history-section').classList.add('hidden'); return; }
-            document.getElementById('history-section').classList.remove('hidden');
-            container.innerHTML = logs.map(l => `<div class="bg-app-surface p-3 rounded-xl flex justify-between text-xs"><span>${l.date}</span><span class="text-app-primary font-bold">${l.weight ? l.weight + ' kg' : ''}</span></div>`).join('');
-        }
-    </script>
+<script>
+(() => {
+'use strict';
+const KEY='hazmFit_v1';
+const defaults={
+ goals:{calories:2100,protein:140,carbs:220,fat:65},
+ water:0,
+ meals:[
+  {id:'meal-breakfast',name:'الفطور',pinned:false,ingredients:[]},
+  {id:'meal-lunch',name:'الغداء',pinned:false,ingredients:[]},
+  {id:'meal-dinner',name:'العشاء',pinned:false,ingredients:[]}
+ ],
+ exercises:[
+  {id:'ex1',name:'تمرين الضغط',sets:3,reps:10,note:'حافظ على استقامة الظهر.'},
+  {id:'ex2',name:'القرفصاء (Squat)',sets:3,reps:12,note:'انزل بتحكم وحافظ على ثبات القدمين.'},
+  {id:'ex3',name:'بلانك',sets:3,reps:30,note:'الثبات لمدة 30 ثانية لكل جولة.'}
+ ],
+ history:{}
+};
+let state=loadState(), modalSaveAction=null, timerSeconds=60, timerInterval=null, trackingSaveTimer=null, trackingPending=null;
+const $=id=>document.getElementById(id);
+const clone=obj=>JSON.parse(JSON.stringify(obj));
+function loadState(){
+ try{
+  let raw=localStorage.getItem(KEY);let saved;try{saved=JSON.parse(raw)}catch(parseError){const backup=localStorage.getItem(KEY+'_backup');saved=backup?JSON.parse(backup):null}
+  if(!saved||typeof saved!=='object') {const fresh=clone(defaults);fresh.lastActiveDate=todayISO();return fresh;}
+  const s={...clone(defaults),...saved};
+  s.goals={...defaults.goals,...(saved.goals||{})};
+  s.meals=Array.isArray(saved.meals)?saved.meals.map(m=>({...m,ingredients:Array.isArray(m.ingredients)?m.ingredients:[],pinned:!!m.pinned})):clone(defaults.meals);
+  s.exercises=Array.isArray(saved.exercises)?saved.exercises:clone(defaults.exercises);
+  s.history=saved.history&&typeof saved.history==='object'&&!Array.isArray(saved.history)?saved.history:{};
+  s.water=Math.max(0,Math.min(8,Math.floor(Number(s.water)||0)));
+  const today=todayISO();
+  if(s.lastActiveDate && s.lastActiveDate!==today){
+   const previous=s.lastActiveDate;
+   s.history[previous]={...(s.history[previous]||{}),meals:clone(s.meals),water:s.water,goals:clone(s.goals)};
+   s.meals=s.meals.filter(m=>m.pinned).map(m=>({...m,ingredients:[]}));
+   s.water=0;
+  }
+  s.lastActiveDate=today;
+  return s;
+ }catch(e){const fresh=clone(defaults);fresh.lastActiveDate=todayISO();return fresh}
+}
+function persist(){
+ try{const serialized=JSON.stringify(state);localStorage.setItem(KEY,serialized);try{localStorage.setItem(KEY+'_backup',serialized)}catch(backupError){}return true}
+ catch(e){console.error('Hazm Fit save failed:',e);showSaveMessage('تعذر الحفظ. مساحة التخزين قد تكون ممتلئة.',true);return false}
+}
+function showSaveMessage(message,isError=false){const el=$('trackMessage');if(el){el.textContent=message;el.style.color=isError?'#fca5a5':'var(--green)'}}
+function checkNewDay(){
+ if(trackingSaveTimer&&trackingPending){clearTimeout(trackingSaveTimer);trackingSaveTimer=null;const pending=trackingPending;trackingPending=null;saveTracking(false,pending.date,pending.weight)}
+ const today=todayISO();
+ if(state.lastActiveDate!==today){
+  const old=state.lastActiveDate;
+  state.history[old]={...(state.history[old]||{}),meals:clone(state.meals),water:state.water,goals:clone(state.goals)};
+  state.meals=state.meals.filter(m=>m.pinned).map(m=>({...m,ingredients:[]}));
+  state.water=0;state.lastActiveDate=today;persist();render();
+  $('todayLabel').textContent=new Date().toLocaleDateString('ar-SA',{weekday:'long',day:'numeric',month:'long'});
+  if(val('trackDate')===old||!val('trackDate')){$('trackDate').value=today;$('trackWeight').value='';}
+ }
+}
+function num(v){const n=Number(v);return Number.isFinite(n)&&n>=0?n:0}
+function safeText(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function totals(meal){
+ return meal.ingredients.reduce((a,x)=>{a.calories+=num(x.calories);a.protein+=num(x.protein);a.carbs+=num(x.carbs);a.fat+=num(x.fat);return a},{calories:0,protein:0,carbs:0,fat:0});
+}
+function allTotals(){
+ return state.meals.reduce((a,m)=>{const t=totals(m);Object.keys(a).forEach(k=>a[k]+=t[k]);return a},{calories:0,protein:0,carbs:0,fat:0});
+}
+function fmt(n){return Math.round(n*10)/10}
+function remaining(goal,used,unit=''){const r=fmt(goal-used);return r>=0?`متبقي ${r}${unit}`:`تجاوزت ${Math.abs(r)}${unit}`}
+function renderSummary(){
+ const t=allTotals(),g=state.goals;
+ $('caloriesNow').textContent=fmt(t.calories);$('caloriesGoal').textContent=g.calories;
+ $('caloriesLeft').textContent=remaining(g.calories,t.calories,' سعرة');
+ $('calorieBar').style.width=Math.min(100,g.calories?100*t.calories/g.calories:0)+'%';
+ [['protein',t.protein],['carbs',t.carbs],['fat',t.fat]].forEach(([k,v])=>{
+  const ids={protein:['proteinNow','proteinGoal','proteinLeft'],carbs:['carbsNow','carbsGoal','carbsLeft'],fat:['fatNow','fatGoal','fatLeft']}[k];
+  $(ids[0]).textContent=fmt(v);$(ids[1]).textContent=g[k];$(ids[2]).textContent=remaining(g[k],v,'غ');
+ });
+}
+function renderWater(){
+ $('waterCount').textContent=state.water;
+ $('waterGrid').innerHTML=Array.from({length:8},(_,i)=>`<button class="water ${i<state.water?'on':''}" data-water="${i+1}" aria-label="كوب ماء ${i+1}" aria-pressed="${i<state.water}">💧</button>`).join('');
+}
+function renderMeals(){
+ $('mealsList').innerHTML=state.meals.map(m=>{
+  const t=totals(m),items=m.ingredients.length?`<ul class="meal-items">${m.ingredients.map(x=>`<li>${safeText(x.name||'مكوّن')} — ${fmt(num(x.calories))} سعرة</li>`).join('')}</ul>`:'<div class="empty">لم تتم إضافة مكونات لهذه الوجبة بعد.</div>';
+  return `<article class="card"><div class="section-head"><div class="row"><span class="meal-title">${safeText(m.name)}</span>${m.pinned?'<span title="مثبت">📌</span>':''}</div><div class="row"><button class="icon-btn" data-pin="${safeText(m.id)}" title="${m.pinned?'إلغاء التثبيت':'تثبيت'}">${m.pinned?'📌':'📍'}</button><button class="icon-btn" data-edit-meal="${safeText(m.id)}" title="تعديل">✏️</button></div></div><div class="meal-stats">~${fmt(t.calories)} سعرة | ${fmt(t.protein)}غ برو | ${fmt(t.carbs)}غ كارب | ${fmt(t.fat)}غ دهون</div>${items}</article>`;
+ }).join('');
+}
+function renderExercises(){
+ $('workoutList').innerHTML=state.exercises.length?state.exercises.map(x=>`<article class="exercise"><div class="row between"><b>${safeText(x.name)}</b><button class="icon-btn" data-edit-ex="${safeText(x.id)}">✏️</button></div><div class="green small" style="margin:5px 0">${num(x.sets)} جولات × ${num(x.reps)} ${num(x.reps)===30?'ثانية':'تكرارات'}</div><div class="muted small">${safeText(x.note||'لا توجد ملاحظات.')}</div></article>`).join(''):'<div class="empty">لا توجد تمارين. أضف تمرينك الأول.</div>';
+}
+function renderHistory(){
+ const entries=Object.entries(state.history).sort((a,b)=>b[0].localeCompare(a[0]));
+ $('historyCount').textContent=`${entries.length} أيام`;
+ $('historyList').innerHTML=entries.length?entries.map(([date,data])=>`<div class="history-item"><div><b>${safeText(date)}</b><div class="muted small">${data.weight!=null?fmt(num(data.weight))+' كجم':'لا يوجد وزن مسجل'}</div></div><button class="btn danger" data-delete-day="${safeText(date)}">حذف</button></div>`).join(''):'<div class="empty">لا توجد أيام محفوظة حتى الآن.</div>';
+}
+function render(){renderSummary();renderWater();renderMeals();renderExercises();renderHistory()}
+function openModal(title,content,onSave){
+ $('modalTitle').textContent=title;$('modalContent').innerHTML=content;modalSaveAction=onSave;$('modalBackdrop').classList.add('show');
+}
+function closeModal(){$('modalBackdrop').classList.remove('show');$('modalContent').innerHTML='';modalSaveAction=null}
+function val(id){return $(id)?.value??''}
+function field(label,id,value,type='number',attrs=''){return `<div class="field-wrap"><label for="${id}">${label}</label><input class="field" id="${id}" type="${type}" value="${safeText(value)}" ${attrs}></div>`}
+function openGoals(){
+ const g=state.goals;
+ openModal('تعديل الأهداف اليومية',`<div class="form-grid">${field('السعرات (Kcal)','gCalories',g.calories,'number','min="0" max="10000" step="1"')}${field('البروتين (غ)','gProtein',g.protein,'number','min="0" max="1000" step="1"')}${field('الكارب (غ)','gCarbs',g.carbs,'number','min="0" max="1000" step="1"')}${field('الدهون (غ)','gFat',g.fat,'number','min="0" max="1000" step="1"')}</div>`,()=>{
+  state.goals={calories:num(val('gCalories')),protein:num(val('gProtein')),carbs:num(val('gCarbs')),fat:num(val('gFat'))};persist();renderSummary();closeModal();
+ });
+}
+function ingredientRow(x={},i=0){
+ return `<div class="ingredient" data-ingredient-row><div class="field-wrap"><label>الصنف</label><input class="field ing-name" value="${safeText(x.name||'')}" placeholder="مثلاً: دجاج"></div><div class="field-wrap"><label>سعرة</label><input class="field ing-cal" type="number" min="0" step="0.1" value="${num(x.calories)}"></div><div class="field-wrap"><label>برو</label><input class="field ing-pro" type="number" min="0" step="0.1" value="${num(x.protein)}"></div><div class="field-wrap"><label>كارب</label><input class="field ing-carb" type="number" min="0" step="0.1" value="${num(x.carbs)}"></div><div class="field-wrap"><label>دهون</label><input class="field ing-fat" type="number" min="0" step="0.1" value="${num(x.fat)}"></div><button class="icon-btn remove-ing" type="button" title="حذف المكون">×</button></div>`;
+}
+// Food lookup uses normalized token sequences (whole-word matching), never substring matching.
+const FOOD_DB=[
+ {aliases:['رز ابيض مطبوخ','ارز ابيض مطبوخ','رز مطبوخ','ارز مطبوخ','رز ابيض','ارز ابيض','رز'],name:'رز أبيض مطبوخ',per100:{calories:130,protein:2.7,carbs:28.2,fat:0.3}},
+ {aliases:['صدر دجاج','دجاج صدر','دجاج'],name:'صدر دجاج مطبوخ',per100:{calories:165,protein:31,carbs:0,fat:3.6}},
+ {aliases:['شوفان','شوفان جاف','اوفان'],name:'شوفان جاف',per100:{calories:389,protein:16.9,carbs:66.3,fat:6.9}},
+ {aliases:['فراوله','فراولة'],name:'فراولة',per100:{calories:32,protein:0.7,carbs:7.7,fat:0.3}},
+ {aliases:['موزتين','موز','موزه','موزة'],name:'موز',perPiece:{calories:105,protein:1.3,carbs:27,fat:0.4}},
+ {aliases:['تفاحتين','تفاح','تفاحة'],name:'تفاح',perPiece:{calories:95,protein:0.5,carbs:25,fat:0.3}},
+ {aliases:['برتقالتين','برتقال','برتقاله','برتقالة'],name:'برتقال',perPiece:{calories:62,protein:1.2,carbs:15.4,fat:0.2}},
+ {aliases:['زبدة فول سوداني','زبدة الفول السوداني','فول سوداني'],name:'زبدة فول سوداني',per100:{calories:588,protein:25,carbs:20,fat:50}},
+ {aliases:['قوانص دجاج','قوانص مطبوخه','قوانص مطبوخة','قوانص'],name:'قوانص دجاج مطبوخة',per100:{calories:154,protein:30.4,carbs:0,fat:2.7}},
+ {aliases:['تونه بالماء','تونة بالماء','تونه','تونة'],name:'تونة بالماء مصفاة',per100:{calories:116,protein:25.5,carbs:0,fat:0.8}},
+ {aliases:['بيضتين','بيضه','بيضة','بيض'],name:'بيض',perPiece:{calories:72,protein:6.3,carbs:0.4,fat:4.8}},
+ {aliases:['خبز ابيض','توست ابيض','توست','خبز'],name:'خبز أبيض',per100:{calories:266,protein:8.9,carbs:49,fat:3.2}},
+ {aliases:['جبن شيدر','شيدر'],name:'جبن شيدر',per100:{calories:403,protein:25,carbs:1.3,fat:33.1}},
+ {aliases:['جبنة','جبنه','جبن'],name:'جبن (تقدير عام)',per100:{calories:300,protein:18,carbs:3,fat:23}}
+];
+function normalizeArabic(s){
+ return String(s||'').toLowerCase().replace(/[ًٌٍَُِّْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/[ؤئ]/g,'ء').replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).replace(/٫/g,'.').replace(/٬/g,'').replace(/[،,؛;()[\]{}:!?؟]/g,' ').replace(/\s+/g,' ').trim();
+}
+function tokens(s){return normalizeArabic(s).split(' ').filter(Boolean)}
+function containsWholePhrase(lineTokens,phraseTokens){
+ if(!phraseTokens.length||phraseTokens.length>lineTokens.length)return false;
+ return lineTokens.some((_,i)=>phraseTokens.every((t,j)=>lineTokens[i+j]===t));
+}
+function parseSmartLine(raw){
+ const line=normalizeArabic(raw);if(!line)return {error:'سطر فارغ'};
+ const ts=tokens(line);let match=null,matchLen=0;
+ for(const food of FOOD_DB)for(const alias of food.aliases){const at=tokens(alias);if(at.length>matchLen&&containsWholePhrase(ts,at)){match=food;matchLen=at.length}}
+ if(!match)return {error:`الصنف غير موجود في قاعدة الحاسبة: ${raw}. أدخل قيمه يدويًا لتجنب التخمين.`};
+ const nums=[...line.matchAll(/(?:^|\s)(\d+(?:\.\d+)?)(?=\s|$)/g)].map(m=>Number(m[1]));
+ let qty=nums.length?nums[0]:null;
+ if(nums.length>1)return {error:`يوجد أكثر من رقم في السطر: ${raw}. اكتب كمية واحدة فقط.`};
+ const hasKg=/(?:^|\s)(?:كجم|كيلو|كيلوجرام)(?:\s|$)/.test(line);
+ const hasGram=/(?:^|\s)(?:جرام|غرام|جم|غ)(?:\s|$)/.test(line);
+ const hasPiece=/(?:^|\s)(?:حبة|حبات|بيضه|بيضتين)(?:\s|$)/.test(line);
+ if(match.perPiece){
+  if(qty===null)qty=(ts.includes('بيضتين')||ts.includes('موزتين')||ts.includes('تفاحتين')||ts.includes('برتقالتين'))?2:1;
+  if(hasKg||hasGram){const grams=qty*(hasKg?1000:1);if(grams<=0||grams>2000)return {error:'كمية البيض غير منطقية. الحد الأقصى 2000 جرام.'};qty=grams/50;}
+  if(!Number.isFinite(qty)||qty<=0||qty>30)return {error:'كمية البيض غير منطقية. الحد الأقصى 30 حبة.'};
+  const f=qty;return {name:match.name,calories:match.perPiece.calories*f,protein:match.perPiece.protein*f,carbs:match.perPiece.carbs*f,fat:match.perPiece.fat*f,display:`${fmt(qty)} حبة`};
+ }
+ if(qty===null)qty=100;
+ if(hasKg)qty*=1000;
+ // الكمية الافتراضية أو المكتوبة بالجرام؛ لا نفترض وحدات أخرى.
+ if(!Number.isFinite(qty)||qty<=0||qty>3000)return {error:'الكمية غير منطقية. الحد الأقصى 3000 جرام للصنف الواحد.'};
+ if(hasPiece)return {error:'هذا الصنف لا يُحسب بالحبة في الحاسبة؛ اكتب الوزن بالجرام.'};
+ const f=qty/100,v=match.per100;
+ const result={calories:v.calories*f,protein:v.protein*f,carbs:v.carbs*f,fat:v.fat*f};
+ if(Object.values(result).some(x=>!Number.isFinite(x)||x>10000))return {error:'الناتج خارج النطاق المتوقع. راجع الكمية والوحدة.'};
+ return {name:match.name,...result,display:`${fmt(qty)}غ`};
+}
+function calculateSmartLines(){
+ const lines=val('smartInput').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+ const results=lines.map(line=>({line,result:parseSmartLine(line)}));
+ const valid=results.filter(x=>!x.result.error);
+ const target=$('smartResults');
+ target.innerHTML=results.map(x=>x.result.error?`<div style="color:#fca5a5;margin:4px 0">⚠ ${safeText(x.result.error)}</div>`:`<div style="margin:4px 0">✓ ${safeText(x.line)} — ${fmt(x.result.calories)} سعرة، بروتين ${fmt(x.result.protein)}غ، كارب ${fmt(x.result.carbs)}غ، دهون ${fmt(x.result.fat)}غ</div>`).join('')||'لم يتم إدخال أي أسطر.';
+ $('addCalculated').disabled=valid.length===0;
+ $('addCalculated').onclick=()=>{
+  valid.forEach(x=>$('ingredientRows').insertAdjacentHTML('beforeend',ingredientRow(x.result)));
+  $('smartInput').value='';$('smartResults').textContent=`تمت إضافة ${valid.length} مكونات إلى قائمة الوجبة. راجع القيم قبل الحفظ.`;
+  $('addCalculated').disabled=true;
+ };
+}
+function openMeal(id){
+ const existing=state.meals.find(m=>m.id===id),meal=existing||{id:'meal-'+Date.now(),name:'وجبة إضافية',pinned:false,ingredients:[]};
+ const content=`<div class="field-wrap" style="margin-bottom:13px"><label for="mealName">اسم الوجبة</label><input class="field" id="mealName" value="${safeText(meal.name)}" placeholder="اسم الوجبة"></div>
+ <div class="row between" style="margin-bottom:9px"><b class="small">المكونات والقيم الغذائية</b><button class="btn" id="addIngredient" type="button">＋ مكوّن</button></div>
+ <div id="ingredientRows">${meal.ingredients.map(ingredientRow).join('')}</div>
+ <div style="background:#252528;border:1px solid #38383d;border-radius:15px;padding:12px;margin-top:14px">
+  <div class="row between" style="margin-bottom:7px"><b class="small">🪄 الحاسبة الذكية</b><span class="muted small">كل سطر يُحسب منفصلاً</span></div>
+  <textarea class="field" id="smartInput" rows="4" placeholder="رز ابيض 250 جرام&#10;قوانص 200 جرام&#10;بيضتين مسلوقة"></textarea>
+  <div class="row wrap" style="margin-top:8px"><button class="btn" id="calculateLines" type="button">احسب المكونات</button><button class="btn primary" id="addCalculated" type="button" disabled>＋ أضف النتائج</button></div>
+  <div id="smartResults" class="small muted" style="margin-top:9px">أدخل كل صنف في سطر مستقل. عند غياب الوزن تُقدّر الكمية بـ100غ (والبيض حبة واحدة). القيم تقديرية ويمكن تعديلها يدوياً.</div>
+ </div>
+ <p class="muted small" style="margin-top:10px">أدخل قيم كل مكوّن مرة واحدة؛ تُجمع القيم تلقائياً دون مضاعفة.</p>
+ <label class="row" style="gap:8px;margin-top:10px"><input id="mealPinned" type="checkbox" ${meal.pinned?'checked':''}> تثبيت الوجبة (لن تُحذف عند التصفير)</label>`;
+ openModal(existing?'تعديل الوجبة':'إضافة وجبة',content,()=>{
+  const ingredients=[...$('ingredientRows').querySelectorAll('[data-ingredient-row]')].map(row=>({
+   name:row.querySelector('.ing-name').value.trim(),calories:num(row.querySelector('.ing-cal').value),protein:num(row.querySelector('.ing-pro').value),carbs:num(row.querySelector('.ing-carb').value),fat:num(row.querySelector('.ing-fat').value)
+  })).filter(x=>x.name||x.calories||x.protein||x.carbs||x.fat);
+  const updated={...meal,name:val('mealName').trim()||'وجبة بدون اسم',pinned:$('mealPinned').checked,ingredients};
+  if(existing)state.meals=state.meals.map(m=>m.id===id?updated:m);else state.meals.push(updated);
+  persist();render();closeModal();
+ });
+ $('addIngredient').addEventListener('click',()=>{$('ingredientRows').insertAdjacentHTML('beforeend',ingredientRow())});
+ $('ingredientRows').addEventListener('click',e=>{if(e.target.closest('.remove-ing'))e.target.closest('[data-ingredient-row]').remove()});
+ $('calculateLines').addEventListener('click',calculateSmartLines);
+}
+function openExercise(id){
+ const existing=state.exercises.find(x=>x.id===id),x=existing||{id:'ex-'+Date.now(),name:'',sets:3,reps:10,note:''};
+ openModal(existing?'تعديل التمرين':'إضافة تمرين',`<div class="form-grid">${field('اسم التمرين','exName',x.name,'text')}${field('عدد الجولات','exSets',x.sets,'number','min="1" max="100"')}${field('التكرارات / الثواني','exReps',x.reps,'number','min="1" max="1000"')}</div><div class="field-wrap" style="margin-top:10px"><label for="exNote">ملاحظات إرشادية</label><textarea class="field" id="exNote" rows="3">${safeText(x.note)}</textarea></div>${existing?'<button type="button" class="btn danger" id="deleteExercise" style="margin-top:12px">حذف التمرين</button>':''}`,()=>{
+  const updated={id:x.id,name:val('exName').trim()||'تمرين جديد',sets:Math.max(1,num(val('exSets'))),reps:Math.max(1,num(val('exReps'))),note:val('exNote').trim()};
+  if(existing)state.exercises=state.exercises.map(a=>a.id===id?updated:a);else state.exercises.push(updated);
+  persist();renderExercises();closeModal();
+ });
+ if(existing)$('deleteExercise').addEventListener('click',()=>{if(confirm('هل تريد حذف هذا التمرين؟')){state.exercises=state.exercises.filter(a=>a.id!==id);persist();renderExercises();closeModal()}});
+}
+function resetUnpinned(){
+ if(!confirm('سيتم حذف الوجبات غير المثبتة وإعادة الماء إلى الصفر. هل تريد المتابعة؟'))return;
+ state.meals=state.meals.filter(m=>m.pinned).map(m=>({...m,ingredients:[]}));state.water=0;state.lastActiveDate=todayISO();persist();render();
+}
+function switchTab(tab){
+ const allowed=['nutrition','workouts','tracking'];
+ if(!allowed.includes(tab))return;
+ document.querySelectorAll('.tab[data-tab]').forEach(b=>{
+  const active=b.dataset.tab===tab;
+  b.classList.toggle('active',active);
+  b.setAttribute('aria-selected',active?'true':'false');
+ });
+ allowed.forEach(id=>{
+  const section=$(id);
+  if(section)section.classList.toggle('hidden',id!==tab);
+ });
+}
+function setTimer(){const m=String(Math.floor(timerSeconds/60)).padStart(2,'0'),s=String(timerSeconds%60).padStart(2,'0');$('timerDisplay').textContent=`${m}:${s}`}
+function startTimer(){
+ if(timerInterval){clearInterval(timerInterval);timerInterval=null;$('timerStart').textContent='▶ متابعة';return}
+ if(timerSeconds<=0)timerSeconds=60;
+ $('timerStart').textContent='Ⅱ إيقاف مؤقت';
+ timerInterval=setInterval(()=>{timerSeconds=Math.max(0,timerSeconds-1);setTimer();if(timerSeconds===0){clearInterval(timerInterval);timerInterval=null;$('timerStart').textContent='▶ بدء';try{if(navigator.vibrate)navigator.vibrate([200,100,200])}catch(e){}}},1000);
+}
+function resetTimer(){if(timerInterval)clearInterval(timerInterval);timerInterval=null;timerSeconds=60;setTimer();$('timerStart').textContent='▶ بدء'}
+function todayISO(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function saveTracking(showMessage=true,dateOverride=null,weightOverride=null){
+ const date=dateOverride??val('trackDate'),weight=weightOverride??val('trackWeight');
+ if(!date){if(showMessage)showSaveMessage('اختر التاريخ أولاً.',true);return false;}
+ if(weight!==''&&(!Number.isFinite(Number(weight))||Number(weight)<=0||Number(weight)>500)){if(showMessage)showSaveMessage('أدخل وزناً صحيحاً بين 0 و500 كجم.',true);return false;}
+ state.history[date]={...(state.history[date]||{}),weight:weight===''?null:Number(weight)};
+ const ok=persist();renderHistory();if(showMessage)showSaveMessage(ok?'تم الحفظ تلقائيًا.':'تعذر حفظ البيانات.',!ok);return ok;
+}
+function queueTrackingSave(){
+ if(trackingSaveTimer)clearTimeout(trackingSaveTimer);
+ trackingPending={date:val('trackDate'),weight:val('trackWeight')};
+ trackingSaveTimer=setTimeout(()=>{const pending=trackingPending;trackingSaveTimer=null;trackingPending=null;if(pending)saveTracking(true,pending.date,pending.weight)},450);
+}
+function loadTrackingDate(){
+ const date=val('trackDate'),item=state.history[date];
+ $('trackWeight').value=item&&item.weight!=null?item.weight:'';
+ $('trackMessage').textContent='';
+}
+// Bind navigation directly to each tab to avoid missed delegated clicks on mobile.
+document.querySelectorAll('.tab[data-tab]').forEach(tab=>{
+ tab.addEventListener('click',()=>switchTab(tab.dataset.tab));
+});
+document.addEventListener('click',e=>{
+ const water=e.target.closest('[data-water]');if(water){state.water=Number(water.dataset.water)===state.water?Number(water.dataset.water)-1:Number(water.dataset.water);persist();renderWater()}
+ const pin=e.target.closest('[data-pin]');if(pin){const m=state.meals.find(x=>x.id===pin.dataset.pin);if(m){m.pinned=!m.pinned;persist();renderMeals()}}
+ const edit=e.target.closest('[data-edit-meal]');if(edit)openMeal(edit.dataset.editMeal);
+ const ex=e.target.closest('[data-edit-ex]');if(ex)openExercise(ex.dataset.editEx);
+ const del=e.target.closest('[data-delete-day]');if(del&&confirm(`حذف سجل ${del.dataset.deleteDay}؟`)){delete state.history[del.dataset.deleteDay];persist();renderHistory()}
+});
+$('settingsBtn').addEventListener('click',openGoals);$('resetBtn').addEventListener('click',resetUnpinned);
+$('addMealBtn').addEventListener('click',()=>openMeal(null));$('addExerciseBtn').addEventListener('click',()=>openExercise(null));
+$('timerStart').addEventListener('click',startTimer);$('timerReset').addEventListener('click',resetTimer);
+$('saveDayBtn').addEventListener('click',saveTracking);
+$('closeModal').addEventListener('click',closeModal);$('modalCancel').addEventListener('click',closeModal);
+$('modalSave').addEventListener('click',()=>{if(modalSaveAction)modalSaveAction()});
+$('modalBackdrop').addEventListener('click',e=>{if(e.target===$('modalBackdrop'))closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+$('trackDate').value=todayISO();$('todayLabel').textContent=new Date().toLocaleDateString('ar-SA',{weekday:'long',day:'numeric',month:'long'});
+$('trackDate').addEventListener('change',()=>{if(trackingSaveTimer){clearTimeout(trackingSaveTimer);trackingSaveTimer=null;const pending=trackingPending;trackingPending=null;if(pending)saveTracking(false,pending.date,pending.weight)}loadTrackingDate()});
+$('trackWeight').addEventListener('input',queueTrackingSave);
+$('trackDate').dispatchEvent(new Event('change'));
+window.addEventListener('focus',checkNewDay);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkNewDay()});
+window.addEventListener('beforeunload',()=>{if(trackingSaveTimer&&trackingPending)saveTracking(false,trackingPending.date,trackingPending.weight);persist()});
+setInterval(checkNewDay,30000);
+render();setTimer();
+})();
+</script>
 </body>
 </html>
